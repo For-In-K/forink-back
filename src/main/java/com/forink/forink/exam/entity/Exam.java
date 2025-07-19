@@ -1,5 +1,7 @@
 package com.forink.forink.exam.entity;
 
+import static com.forink.forink.exam.entity.StatusType.IN_PROGRESS;
+
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.MemberRoleType;
 import com.forink.global.base.BaseEntity;
@@ -34,11 +36,11 @@ public class Exam extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ExamStatusType examStatusType;
+    private StatusType statusType = IN_PROGRESS;
 
     @Builder
-    private Exam(final Member member, final ExamStatusType examStatusType) {
+    private Exam(final Member member, final StatusType examStatusType) {
         this.member = member;
-        this.examStatusType = examStatusType;
+        this.statusType = examStatusType;
     }
 }
