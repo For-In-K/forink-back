@@ -34,11 +34,11 @@ public class Exam extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ExamStatusType mode;
+    private ExamStatusType examStatusType;
 
     @Builder
-    private Exam(final Member member, final ExamStatusType mode) {
+    private Exam(final Member member, final ExamStatusType examStatusType) {
         this.member = member;
-        this.mode = mode;
+        this.examStatusType = examStatusType;
     }
 }
