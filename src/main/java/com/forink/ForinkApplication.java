@@ -1,11 +1,9 @@
-package com.forink.forink;
+package com.forink;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
-@ConfigurationPropertiesScan
 public class ForinkApplication {
 
 	public static void main(String[] args) {
