@@ -1,6 +1,6 @@
 package com.forink.forink.auth.application;
 
-import com.forink.forink.auth.utils.GoogleClient;
+import com.forink.forink.auth.util.GoogleClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
