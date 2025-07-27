@@ -20,5 +20,4 @@ public class AuthController {
         response.sendRedirect(authService.getGoogleLoginUrl());
     }
 
-
 }
