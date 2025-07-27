@@ -2,11 +2,15 @@ package com.forink.forink.exam.application;
 
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_회원;
 
+import com.forink.forink.exam.application.dto.response.ExamAnswerResponse;
 import com.forink.forink.exam.entity.Exam;
+import com.forink.forink.exam.entity.ExamStep;
 import com.forink.forink.exam.entity.dao.ExamRepository;
+import com.forink.forink.exam.entity.dao.ExamStepRepository;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.dao.MemberRepository;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ExamService {
 
     private final ExamRepository examRepository;
+    private final ExamStepRepository examStepRepository;
     private final MemberRepository memberRepository;
 
     public void createExam() {
@@ -25,6 +30,16 @@ public class ExamService {
         examRepository.save(Exam.builder()
                 .member(tempMember)
                 .build());
+    }
+
+    public List<ExamAnswerResponse> getExam() {
+        final Member tempMember = createFakeMember();
+        final Exam exam = examRepository.findByMember(tempMember).orElseThrow();
+        final List<ExamStep> steps = examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
+
+        return steps.stream()
+                .map(s -> new ExamAnswerResponse(s.getStepNumber(), s.getAnswer()))
+                .toList();
     }
 
     private Member createFakeMember() {
