@@ -26,7 +26,6 @@ public class ExamController {
     @PostMapping
     public ResponseEntity<Void> createExam() {
         examService.createExam();
-
         return ResponseEntity.status(CREATED)
                 .location(URI.create("/exams"))
                 .build();
