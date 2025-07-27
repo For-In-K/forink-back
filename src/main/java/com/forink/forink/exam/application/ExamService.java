@@ -34,6 +34,7 @@ public class ExamService {
     }
 
     public List<ExamAnswerResponse> getExam() {
+        // todo : 로그인 기능 개발 완료 시 수정 필요
         final Member tempMember = createFakeMember();
         final Exam exam = examRepository.findByMember(tempMember).orElseThrow();
         final List<ExamStep> steps = examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
@@ -44,6 +45,7 @@ public class ExamService {
     }
 
     public void createExamStep(final ExamAnswerRequest request, final Integer stepNumber) {
+        // todo : 로그인 기능 개발 완료 시 수정 필요
         final Member tempMember = createFakeMember();
         final Exam exam = examRepository.findByMember(tempMember).orElseThrow();
 
