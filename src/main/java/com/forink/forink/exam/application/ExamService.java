@@ -2,6 +2,7 @@ package com.forink.forink.exam.application;
 
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_회원;
 
+import com.forink.forink.exam.application.dto.request.ExamAnswerRequest;
 import com.forink.forink.exam.application.dto.response.ExamAnswerResponse;
 import com.forink.forink.exam.entity.Exam;
 import com.forink.forink.exam.entity.ExamStep;
@@ -40,6 +41,17 @@ public class ExamService {
         return steps.stream()
                 .map(s -> new ExamAnswerResponse(s.getStepNumber(), s.getAnswer()))
                 .toList();
+    }
+
+    public void createExamStep(final ExamAnswerRequest request, final Integer stepNumber) {
+        final Member tempMember = createFakeMember();
+        final Exam exam = examRepository.findByMember(tempMember).orElseThrow();
+
+        examStepRepository.save(ExamStep.builder()
+                .exam(exam)
+                .stepNumber(stepNumber)
+                .answer(request.answer())
+                .build());
     }
 
     private Member createFakeMember() {
