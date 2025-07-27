@@ -31,7 +31,7 @@ public class Member extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String google_id;
+    private String googleId;
 
     @Column(nullable = false)
     private String email;
@@ -47,10 +47,10 @@ public class Member extends BaseEntity {
     private List<Roadmap> roadmaps = new ArrayList<>();
 
     @Builder
-    private Member(final String name, final String google_id, final String email, final Integer point,
-                  final MemberRoleType mode, final List<Roadmap> roadmaps) {
+    private Member(final String name, final String googleId, final String email, final Integer point,
+                   final MemberRoleType mode, final List<Roadmap> roadmaps) {
         this.name = name;
-        this.google_id = google_id;
+        this.googleId = googleId;
         this.email = email;
         this.point = point;
         this.mode = mode;
