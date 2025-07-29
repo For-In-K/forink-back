@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,8 +45,8 @@ public class RoadmapCompletionFeedbackRating extends BaseEntity {
 
     @Builder
     private RoadmapCompletionFeedbackRating(final RoadmapCompletionFeedback completionFeedback, final Long raterId,
-                                           final Double expertise,
-                                           final RoadmapAnswerType relevance, final RoadmapAnswerType recommend) {
+                                            final Double expertise,
+                                            final RoadmapAnswerType relevance, final RoadmapAnswerType recommend) {
         this.completionFeedback = completionFeedback;
         this.raterId = raterId;
         this.expertise = expertise;

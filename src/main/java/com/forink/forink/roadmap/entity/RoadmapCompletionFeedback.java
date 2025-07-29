@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,15 +24,15 @@ public class RoadmapCompletionFeedback extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "roadmap_step_id", nullable = false)
-    private RoadmapStep roadmapStep;
+    @JoinColumn(name = "roadmap_id", nullable = false)
+    private Roadmap roadmap;
 
     @Column(nullable = false)
     private String content;
 
     @Builder
-    private RoadmapCompletionFeedback(final RoadmapStep roadmapStep, final String content) {
-        this.roadmapStep = roadmapStep;
+    private RoadmapCompletionFeedback(final Roadmap roadmap, final String content) {
+        this.roadmap = roadmap;
         this.content = content;
     }
 }

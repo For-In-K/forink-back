@@ -61,7 +61,7 @@ public class ExamService {
                 .email("temp@pusan.ac.kr")
                 .google_id("tempId")
                 .name("tempName")
-                .mode(ROLE_회원)
+                .memberRoleType(ROLE_회원)
                 .roadmaps(new ArrayList<>())
                 .build());
     }

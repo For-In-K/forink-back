@@ -38,36 +38,34 @@ public class Roadmap extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "roadmap_type_id", nullable = false)
-    private RoadmapType type;
-
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    private String description;
-
-    @Column(nullable = false)
-    private Integer currentStep;
+    private Integer order;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusType statusType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RoadmapType type;
+
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadmapStep> steps = new ArrayList<>();
 
+    @OneToOne(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RoadmapCompletionFeedback roadmapCompletionFeedback;
+
     @Builder
-    private Roadmap(final Member member, final RoadmapType type, final String title, final String description,
-                   final Integer currentStep,
-                   final StatusType statusType, final List<RoadmapStep> steps) {
+    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType type,
+                    final List<RoadmapStep> steps) {
         this.member = member;
-        this.type = type;
         this.title = title;
-        this.description = description;
-        this.currentStep = currentStep;
-        this.statusType = statusType;
+        this.order = order;
+        this.type = type;
+        this.statusType = IN_PROGRESS;
         this.steps = steps;
     }
 }
