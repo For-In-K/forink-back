@@ -2,7 +2,8 @@ package com.forink.forink.global.security;
 
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.dao.MemberRepository;
-import com.forink.global.security.provider.GoogleUserInfo;
+import com.forink.forink.global.security.data.MemberPrincipal;
+import com.forink.forink.global.security.data.GoogleUserInfo;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -26,14 +27,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         GoogleUserInfo googleUserInfo = new GoogleUserInfo(attributes);
-        String googleId = googleUserInfo.getGoogleId();
+        String email = googleUserInfo.getEmail();
 
-        Optional<Member> optionalMember = memberRepository.findByGoogleId(googleId);
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
         boolean isFirstLogin = optionalMember.isEmpty();
 
         Member member = optionalMember.orElseGet(() -> {
+            String googleId = googleUserInfo.getGoogleId();
             String name = googleUserInfo.getName();
-            String email = googleUserInfo.getEmail();
             Member newMember = Member.builder()
                     .googleId(googleId)
                     .name(name)
@@ -44,7 +45,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         return MemberPrincipal.builder()
                 .member(member)
-                .authorities(Collections.singleton(new SimpleGrantedAuthority(member.getMode().toString())))
+                .authorities(Collections.singleton(new SimpleGrantedAuthority(member.getMemberRoleType().toString())))
                 .attributes(attributes)
                 .isFirstLogin(isFirstLogin)
                 .build();
