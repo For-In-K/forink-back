@@ -50,7 +50,7 @@ public class Roadmap extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RoadmapType type;
+    private RoadmapType roadmapType;
 
     @OneToMany(mappedBy = "roadmap", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoadmapStep> steps = new ArrayList<>();
@@ -59,12 +59,12 @@ public class Roadmap extends BaseEntity {
     private RoadmapCompletionFeedback roadmapCompletionFeedback;
 
     @Builder
-    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType type,
+    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType roadmapType,
                     final List<RoadmapStep> steps) {
         this.member = member;
         this.title = title;
         this.order = order;
-        this.type = type;
+        this.roadmapType = roadmapType;
         this.statusType = IN_PROGRESS;
         this.steps = steps;
     }
