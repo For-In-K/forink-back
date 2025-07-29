@@ -1,4 +1,4 @@
-package com.forink.global.base;
+package com.forink.forink.global.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

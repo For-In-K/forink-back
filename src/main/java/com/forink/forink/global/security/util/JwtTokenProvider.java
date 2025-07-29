@@ -1,4 +1,4 @@
-package com.forink.global.security.util;
+package com.forink.forink.global.security.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

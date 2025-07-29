@@ -1,4 +1,4 @@
-package com.forink;
+package com.forink.forink;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

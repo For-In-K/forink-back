@@ -1,4 +1,4 @@
-package com.forink.global.security;
+package com.forink.forink.global.security.data;
 
 import com.forink.forink.member.entity.Member;
 import java.util.Collection;

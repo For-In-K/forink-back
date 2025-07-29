@@ -3,8 +3,7 @@ package com.forink.forink.exam.entity;
 import static com.forink.forink.exam.entity.StatusType.IN_PROGRESS;
 
 import com.forink.forink.member.entity.Member;
-import com.forink.forink.member.entity.MemberRoleType;
-import com.forink.global.base.BaseEntity;
+import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.forink.global.security.handler;
+package com.forink.forink.global.security.handler;
 
 import com.forink.forink.member.entity.Member;
 import com.forink.global.security.MemberPrincipal;

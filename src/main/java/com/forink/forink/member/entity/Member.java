@@ -1,7 +1,7 @@
 package com.forink.forink.member.entity;
 
 import com.forink.forink.roadmap.entity.Roadmap;
-import com.forink.global.base.BaseEntity;
+import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

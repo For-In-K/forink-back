@@ -1,4 +1,4 @@
-package com.forink.global.security;
+package com.forink.forink.global.security;
 
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.dao.MemberRepository;

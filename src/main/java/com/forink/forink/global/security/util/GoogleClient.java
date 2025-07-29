@@ -1,4 +1,4 @@
-package com.forink.forink.auth.util;
+package com.forink.forink.global.security.util;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import java.util.List;

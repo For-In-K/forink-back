@@ -1,4 +1,4 @@
-package com.forink.global.config;
+package com.forink.forink.global.security;
 
 import com.forink.forink.member.entity.dao.MemberRepository;
 import com.forink.global.security.CustomOAuth2UserService;

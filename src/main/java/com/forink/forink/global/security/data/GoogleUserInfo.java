@@ -1,4 +1,4 @@
-package com.forink.global.security.provider;
+package com.forink.forink.global.security.data;
 
 import java.util.Map;
 import lombok.Getter;
