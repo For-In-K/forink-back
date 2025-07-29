@@ -41,19 +41,19 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MemberRoleType mode;
+    private MemberRoleType memberRoleType;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Roadmap> roadmaps = new ArrayList<>();
 
     @Builder
     private Member(final String name, final String googleId, final String email, final Integer point,
-                   final MemberRoleType mode, final List<Roadmap> roadmaps) {
+                   final MemberRoleType memberRoleType, final List<Roadmap> roadmaps) {
         this.name = name;
         this.googleId = googleId;
         this.email = email;
         this.point = point;
-        this.mode = mode;
+        this.memberRoleType = memberRoleType;
         this.roadmaps = roadmaps;
     }
 }
