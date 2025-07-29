@@ -1,53 +1,33 @@
 package com.forink.forink.global.security.data;
 
-import com.forink.forink.member.entity.Member;
 import java.util.Collection;
-import java.util.Map;
-import lombok.Builder;
-import lombok.Getter;
+import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
-@Getter
-@Builder
-public class MemberPrincipal implements OAuth2User, UserDetails {
+public record MemberPrincipal(
+        Long memberId,
+        String username,
+        List<String> roles
 
-    private final Member member;
-
-    private final Collection<? extends GrantedAuthority> authorities;
-
-    private final Map<String, Object> attributes;
-
-    private final boolean isFirstLogin;
+) implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return "";
     }
 
     @Override
     public String getUsername() {
-        return member.getName();
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
+        return username;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getName() {
-        return null;
-    }
-
-    public Long getId() {
-        return member.getId();
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 
 }
