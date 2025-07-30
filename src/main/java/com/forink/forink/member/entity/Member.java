@@ -47,12 +47,12 @@ public class Member extends BaseEntity {
     private List<Roadmap> roadmaps = new ArrayList<>();
 
     @Builder
-    private Member(final String name, final String googleId, final String email, final Integer point,
-                   final MemberRoleType memberRoleType, final List<Roadmap> roadmaps) {
+    private Member(final String name, final String googleId, final String email, final MemberRoleType memberRoleType,
+                   final List<Roadmap> roadmaps) {
         this.name = name;
         this.googleId = googleId;
         this.email = email;
-        this.point = point;
+        this.point = 0;
         this.memberRoleType = memberRoleType;
         this.roadmaps = roadmaps;
     }
