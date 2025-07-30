@@ -1,7 +1,7 @@
 package com.forink.forink.member.entity;
 
 import com.forink.forink.roadmap.entity.Roadmap;
-import com.forink.global.base.BaseEntity;
+import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ public class Member extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String google_id;
+    private String googleId;
 
     @Column(nullable = false)
     private String email;
@@ -47,10 +47,10 @@ public class Member extends BaseEntity {
     private List<Roadmap> roadmaps = new ArrayList<>();
 
     @Builder
-    private Member(final String name, final String google_id, final String email, final MemberRoleType memberRoleType,
+    private Member(final String name, final String googleId, final String email, final MemberRoleType memberRoleType,
                    final List<Roadmap> roadmaps) {
         this.name = name;
-        this.google_id = google_id;
+        this.googleId = googleId;
         this.email = email;
         this.point = 0;
         this.memberRoleType = memberRoleType;

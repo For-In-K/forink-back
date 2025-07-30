@@ -1,6 +1,6 @@
 package com.forink.forink.exam.entity;
 
-import com.forink.global.base.BaseEntity;
+import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

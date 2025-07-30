@@ -3,7 +3,7 @@ package com.forink.forink.chat.entity;
 import static com.forink.forink.chat.entity.ChatStatusType.OPEN;
 
 import com.forink.forink.member.entity.Member;
-import com.forink.global.base.BaseEntity;
+import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
