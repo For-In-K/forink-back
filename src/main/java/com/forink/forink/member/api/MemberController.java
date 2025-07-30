@@ -1,6 +1,7 @@
 package com.forink.forink.member.api;
 
 import com.forink.forink.member.application.MemberService;
+import com.forink.forink.member.application.dto.response.OAuthLoginResponse;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,9 +32,8 @@ public class MemberController {
     }
 
     @GetMapping("/oauth/google/callback")
-    public ResponseEntity<?> handleGoogleOAuthCallback(@RequestParam String code) {
-        return ResponseEntity.ok()
-                .build();
+    public ResponseEntity<OAuthLoginResponse> handleGoogleOAuthCallback(@RequestParam String code) {
+        return ResponseEntity.ok(memberService.processGoogleOAuthCallback(code));
     }
 
 }

@@ -33,7 +33,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         if (authentication != null && authentication.getPrincipal() instanceof MemberPrincipal principal) {
             Long memberId = principal.memberId();
             return memberRepository.findById(memberId)
-                    .orElse(null);
+                    .orElseThrow(() -> new RuntimeException("Member not found"));
         }
 
         return null;

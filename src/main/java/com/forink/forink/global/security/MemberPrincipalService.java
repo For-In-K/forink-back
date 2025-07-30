@@ -3,7 +3,6 @@ package com.forink.forink.global.security;
 import com.forink.forink.global.security.data.MemberPrincipal;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.dao.MemberRepository;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,9 +24,7 @@ public class MemberPrincipalService implements UserDetailsService {
         return new MemberPrincipal(
                 member.getId(),
                 member.getName(),
-                Collections.singletonList(
-                        member.getMemberRoleType().name()
-                )
+                member.getMemberRoleType().name()
         );
     }
 

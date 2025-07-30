@@ -7,10 +7,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public record MemberPrincipal(
-        Long memberId,
-        String username,
-        List<String> roles
 
+        Long memberId,
+
+        String username,
+
+        String role
 ) implements UserDetails {
 
     @Override
@@ -25,9 +27,7 @@ public record MemberPrincipal(
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.forink.forink.global.security.util;
 
-import static com.forink.forink.global.security.data.JwtConstants.AUTH_TYPE;
+import static com.forink.forink.global.security.data.OAuthConstants.BEARER_TOKEN_PREFIX;
 
 import com.forink.forink.global.security.MemberPrincipalService;
 import io.jsonwebtoken.Claims;
@@ -27,6 +27,8 @@ public class JwtTokenProvider {
     @Value("${spring.jwt.secret}")
     private String secret;
 
+    private static final String ROLE = "role";
+
     private static final String EMAIL = "email";
 
     private Key secretKey;
@@ -38,19 +40,21 @@ public class JwtTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateAccessToken(String userPk, String email) {
+    public String generateAccessToken(String userPk, String role, String email) {
+        Claims claims = Jwts.claims().setSubject(userPk);
+        claims.put(ROLE, role);
+        claims.put(EMAIL, email);
         Date now = new Date();
-
         return Jwts.builder()
                 .setSubject(userPk)
-                .claim(EMAIL, email)
+                .setClaims(claims)
                 .setIssuedAt(now)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public Authentication getAuthentication(String token) {
-        String memberId = getClaim(token).getSubject();
+        String memberId = getClaims(token).getSubject();
         UserDetails userDetails = memberPrincipalService.loadUserByUsername(memberId);
         return new UsernamePasswordAuthenticationToken(
                 userDetails,
@@ -59,7 +63,7 @@ public class JwtTokenProvider {
         );
     }
 
-    private Claims getClaim(String token) {
+    private Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
@@ -69,8 +73,8 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (bearerToken != null && bearerToken.startsWith(AUTH_TYPE)) {
-            return bearerToken.substring(AUTH_TYPE.length());
+        if (bearerToken != null && bearerToken.startsWith(BEARER_TOKEN_PREFIX)) {
+            return bearerToken.substring(BEARER_TOKEN_PREFIX.length());
         }
         return null;
     }
