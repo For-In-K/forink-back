@@ -25,7 +25,7 @@ public class MemberController {
     }
 
     @GetMapping("/oauth/google/callback")
-    public ResponseEntity<OAuthLoginResponse> handleGoogleOAuthCallback(@RequestParam String code) {
+    public ResponseEntity<OAuthLoginResponse> handleGoogleOAuthCallback(@RequestParam("code") String code) {
         return ResponseEntity.ok(memberService.processGoogleOAuthCallback(code));
     }
 
