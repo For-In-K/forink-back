@@ -1,7 +1,9 @@
 package com.forink.forink.resume.application;
 
 import com.forink.forink.member.entity.Member;
+import com.forink.forink.resume.application.dto.request.ResumeAnswerRequest;
 import com.forink.forink.resume.application.dto.response.ResumeResponse;
+import com.forink.forink.resume.domain.ResumeStepUpdater;
 import com.forink.forink.resume.entity.Resume;
 import com.forink.forink.resume.entity.dao.ResumeRepository;
 import jakarta.transaction.Transactional;
@@ -25,6 +27,16 @@ public class ResumeService {
         Resume resume = resumeRepository.findByMember(member)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
         return ResumeResponse.from(resume);
+    }
+
+    @Transactional
+    public void updateResumeByStep(final Member member,
+                                   final Integer stepNumber,
+                                   final ResumeAnswerRequest request) {
+        Resume resume = resumeRepository.findByMember(member)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+        ResumeStepUpdater updater = ResumeStepUpdater.from(stepNumber);
+        updater.update(resume, request.answer());
     }
 
 }
