@@ -59,7 +59,7 @@ public class ExamService {
     private Member createFakeMember() {
         return memberRepository.save(Member.builder()
                 .email("temp@pusan.ac.kr")
-                .google_id("tempId")
+                .googleId("tempId")
                 .name("tempName")
                 .memberRoleType(ROLE_회원)
                 .roadmaps(new ArrayList<>())
