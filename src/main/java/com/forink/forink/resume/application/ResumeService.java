@@ -24,8 +24,8 @@ public class ResumeService {
     }
 
     public ResumeResponse getResume(final Member member) {
-        Resume resume = resumeRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+        Resume resume = resumeRepository.findByMember_Id(member.getId())
+                .orElseThrow(() -> new RuntimeException("Resume not found"));
         return ResumeResponse.from(resume);
     }
 
@@ -33,8 +33,8 @@ public class ResumeService {
     public void updateResumeByStep(final Member member,
                                    final Integer stepNumber,
                                    final ResumeAnswerRequest request) {
-        Resume resume = resumeRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException("Member not found"));
+        Resume resume = resumeRepository.findByMember_Id(member.getId())
+                .orElseThrow(() -> new RuntimeException("Resume not found"));
         ResumeStepUpdater updater = ResumeStepUpdater.from(stepNumber);
         updater.update(resume, request.answer());
     }
