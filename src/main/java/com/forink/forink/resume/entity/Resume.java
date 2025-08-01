@@ -60,4 +60,28 @@ public class Resume extends BaseEntity {
         this.member = member;
         this.statusType = IN_PROGRESS;
     }
+
+    public void updateAnswerName(String answerName) {
+        this.answerName = answerName;
+    }
+
+    public void updateAnswerAge(String answerAge) {
+        this.answerAge = answerAge;
+    }
+
+    public void updateAnswerNationality(String answerNationality) {
+        this.answerNationality = answerNationality;
+    }
+
+    public void updateAnswerLanguage(String answerLanguage) {
+        this.answerLanguage = answerLanguage;
+    }
+
+    public void updateAnswerExpertise(String answerExpertise) {
+        this.answerExpertise = answerExpertise;
+    }
+
+    public void updateAnswerLink(String answerLink) {
+        this.answerLink = answerLink;
+    }
 }

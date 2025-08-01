@@ -1,4 +1,42 @@
 package com.forink.forink.resume.application;
 
+import com.forink.forink.member.entity.Member;
+import com.forink.forink.resume.application.dto.request.ResumeAnswerRequest;
+import com.forink.forink.resume.application.dto.response.ResumeResponse;
+import com.forink.forink.resume.domain.ResumeStepUpdater;
+import com.forink.forink.resume.entity.Resume;
+import com.forink.forink.resume.entity.dao.ResumeRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
 public class ResumeService {
+
+    private final ResumeRepository resumeRepository;
+
+    @Transactional
+    public void createResume(final Member member) {
+        resumeRepository.save(Resume.builder()
+                .member(member)
+                .build());
+    }
+
+    public ResumeResponse getResume(final Member member) {
+        Resume resume = resumeRepository.findByMember_Id(member.getId())
+                .orElseThrow(() -> new RuntimeException("Resume not found"));
+        return ResumeResponse.from(resume);
+    }
+
+    @Transactional
+    public void updateResumeByStep(final Member member,
+                                   final Integer stepNumber,
+                                   final ResumeAnswerRequest request) {
+        Resume resume = resumeRepository.findByMember_Id(member.getId())
+                .orElseThrow(() -> new RuntimeException("Resume not found"));
+        ResumeStepUpdater updater = ResumeStepUpdater.from(stepNumber);
+        updater.update(resume, request.answer());
+    }
+
 }
