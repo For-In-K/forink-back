@@ -1,5 +1,6 @@
 package com.forink.forink.resume.entity;
 
+import static com.forink.forink.exam.entity.StatusType.COMPLETED;
 import static com.forink.forink.exam.entity.StatusType.IN_PROGRESS;
 
 import com.forink.forink.exam.entity.StatusType;
@@ -15,6 +16,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import java.util.Objects;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -83,5 +86,26 @@ public class Resume extends BaseEntity {
 
     public void updateAnswerLink(String answerLink) {
         this.answerLink = answerLink;
+    }
+
+    private boolean areAllAnswersFilled() {
+        return Stream.of(
+                answerName,
+                answerAge,
+                answerNationality,
+                answerLanguage,
+                answerExpertise,
+                answerLink
+        ).allMatch(Objects::nonNull);
+    }
+
+    public void complete() {
+        if (this.statusType == COMPLETED) {
+            return;
+        }
+        if (!areAllAnswersFilled()) {
+            throw new IllegalStateException("모든 필수 답변이 작성되지 않아 이력서를 완료할 수 없습니다.");
+        }
+        this.statusType = COMPLETED;
     }
 }

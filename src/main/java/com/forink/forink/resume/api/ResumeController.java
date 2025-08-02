@@ -34,6 +34,14 @@ public class ResumeController {
                 .build();
     }
 
+    @PostMapping("/submit")
+    public ResponseEntity<Void> submitResume(@LoginMember final Member member) {
+        resumeService.submitResume(member.getId());
+        return ResponseEntity.ok()
+                .location(URI.create("/"))
+                .build();
+    }
+
     @GetMapping
     public ResponseEntity<ResumeResponse> getResume(@LoginMember final Member member) {
         return ResponseEntity.ok(resumeService.getResume(member));

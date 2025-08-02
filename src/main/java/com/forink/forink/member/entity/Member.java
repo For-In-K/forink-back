@@ -1,5 +1,8 @@
 package com.forink.forink.member.entity;
 
+import static com.forink.forink.member.entity.MemberRoleType.ROLE_예비가이드;
+import static com.forink.forink.member.entity.MemberRoleType.ROLE_회원;
+
 import com.forink.forink.roadmap.entity.Roadmap;
 import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.CascadeType;
@@ -55,5 +58,12 @@ public class Member extends BaseEntity {
         this.point = 0;
         this.memberRoleType = memberRoleType;
         this.roadmaps = roadmaps;
+    }
+
+    public void qualifyAsPreGuide() {
+        if (this.memberRoleType != ROLE_회원) {
+            throw new IllegalStateException("오직 일반 회원만 예비 가이드 자격을 얻을 수 있습니다.");
+        }
+        this.memberRoleType = ROLE_예비가이드;
     }
 }

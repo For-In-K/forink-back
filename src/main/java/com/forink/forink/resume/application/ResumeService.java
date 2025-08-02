@@ -23,6 +23,16 @@ public class ResumeService {
                 .build());
     }
 
+    @Transactional
+    public void submitResume(final Long memberId) {
+        Resume resume = resumeRepository.findByMember_Id(memberId)
+                .orElseThrow(() -> new RuntimeException("Resume not found"));
+        Member member = resume.getMember();
+
+        resume.complete();
+        member.qualifyAsPreGuide();
+    }
+
     public ResumeResponse getResume(final Member member) {
         Resume resume = resumeRepository.findByMember_Id(member.getId())
                 .orElseThrow(() -> new RuntimeException("Resume not found"));
