@@ -44,14 +44,14 @@ public class ResumeController {
 
     @GetMapping
     public ResponseEntity<ResumeResponse> getResume(@LoginMember final Member member) {
-        return ResponseEntity.ok(resumeService.getResume(member));
+        return ResponseEntity.ok(resumeService.getResume(member.getId()));
     }
 
     @PatchMapping("/steps/{stepNumber}")
     public ResponseEntity<Void> updateResume(@LoginMember final Member member,
                                              @PathVariable @Min(1) final Integer stepNumber,
                                              @Valid @RequestBody final ResumeAnswerRequest request) {
-        resumeService.updateResumeByStep(member, stepNumber, request);
+        resumeService.updateResumeByStep(member.getId(), stepNumber, request.answer());
         return ResponseEntity.noContent().build();
     }
 
