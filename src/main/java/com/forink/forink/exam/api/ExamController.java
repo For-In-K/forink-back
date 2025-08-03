@@ -5,6 +5,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 import com.forink.forink.exam.application.ExamService;
 import com.forink.forink.exam.application.dto.request.ExamAnswerRequest;
 import com.forink.forink.exam.application.dto.response.ExamAnswerResponse;
+import com.forink.forink.global.security.annotation.LoginMember;
+import com.forink.forink.member.entity.Member;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -26,24 +28,24 @@ public class ExamController {
 
     private final ExamService examService;
 
-    // todo: member 정보 받아오는 로직 필요
     @PostMapping
-    public ResponseEntity<Void> createExam() {
-        examService.createExam();
+    public ResponseEntity<Void> createExam(@LoginMember final Member member) {
+        examService.createExam(member);
         return ResponseEntity.status(CREATED)
                 .location(URI.create("/exams"))
                 .build();
     }
 
     @GetMapping
-    public ResponseEntity<List<ExamAnswerResponse>> getExam() {
-        return ResponseEntity.ok(examService.getExam());
+    public ResponseEntity<List<ExamAnswerResponse>> getExam(@LoginMember final Member member) {
+        return ResponseEntity.ok(examService.getExam(member));
     }
 
     @PostMapping("/steps/{stepNumber}")
     public ResponseEntity<Void> createExamStep(@Valid @RequestBody final ExamAnswerRequest request,
-                                               @PathVariable final Integer stepNumber) {
-        examService.createExamStep(request, stepNumber);
+                                               @PathVariable final Integer stepNumber,
+                                               @LoginMember final Member member) {
+        examService.createExamStep(request, stepNumber, member);
         return ResponseEntity.status(CREATED).build();
     }
 }

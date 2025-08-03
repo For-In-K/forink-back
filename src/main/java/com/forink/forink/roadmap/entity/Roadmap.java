@@ -1,7 +1,8 @@
 package com.forink.forink.roadmap.entity;
 
-import com.forink.forink.exam.entity.StatusType;
 import static com.forink.forink.exam.entity.StatusType.IN_PROGRESS;
+
+import com.forink.forink.exam.entity.StatusType;
 import com.forink.forink.global.base.BaseEntity;
 import com.forink.forink.member.entity.Member;
 import jakarta.persistence.CascadeType;
@@ -58,13 +59,19 @@ public class Roadmap extends BaseEntity {
     private RoadmapCompletionFeedback roadmapCompletionFeedback;
 
     @Builder
-    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType roadmapType,
-                    final List<RoadmapStep> steps) {
+    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType roadmapType) {
         this.member = member;
         this.title = title;
         this.order = order;
         this.roadmapType = roadmapType;
         this.statusType = IN_PROGRESS;
-        this.steps = steps;
+    }
+
+    public boolean isNotMine(final Member member) {
+        return !this.member.equals(member);
+    }
+
+    public void addStep(final RoadmapStep step) {
+        this.steps.add(step);
     }
 }
