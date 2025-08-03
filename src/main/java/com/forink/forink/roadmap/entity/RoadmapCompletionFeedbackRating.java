@@ -3,8 +3,6 @@ package com.forink.forink.roadmap.entity;
 import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,24 +31,24 @@ public class RoadmapCompletionFeedbackRating extends BaseEntity {
     private Long raterId;
 
     @Column(nullable = false)
-    private Double expertise;
+    private Integer expertise;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RoadmapAnswerType relevance;
+    private Integer help;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RoadmapAnswerType recommend;
+    private Integer recommend;
 
     @Builder
-    private RoadmapCompletionFeedbackRating(final RoadmapCompletionFeedback completionFeedback, final Long raterId,
-                                            final Double expertise,
-                                            final RoadmapAnswerType relevance, final RoadmapAnswerType recommend) {
+    private RoadmapCompletionFeedbackRating(final RoadmapCompletionFeedback completionFeedback,
+                                            final Long raterId,
+                                            final Integer expertise,
+                                            final Integer help,
+                                            final Integer recommend) {
         this.completionFeedback = completionFeedback;
         this.raterId = raterId;
         this.expertise = expertise;
-        this.relevance = relevance;
+        this.help = help;
         this.recommend = recommend;
     }
 }
