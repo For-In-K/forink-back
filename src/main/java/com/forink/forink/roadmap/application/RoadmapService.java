@@ -88,7 +88,7 @@ public class RoadmapService {
 
     public List<RoadmapTypeDetailResponse> getRoadmapTypeDetails(final Long roadmapId, final Member member) {
         final Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow();
-        if (!roadmap.isMine(member)) {
+        if (roadmap.isNotMine(member)) {
             throw new RuntimeException();
         }
 
@@ -109,7 +109,7 @@ public class RoadmapService {
     public void updateRoadmapIsChecked(final Long roadmapStepContentId, final Member member) {
         final RoadmapStepContent roadmapStepContent = roadmapStepContentRepository.findById(roadmapStepContentId)
                 .orElseThrow();
-        if (!roadmapStepContent.getRoadmapStep().getRoadmap().isMine(member)) {
+        if (roadmapStepContent.getRoadmapStep().getRoadmap().isNotMine(member)) {
             throw new RuntimeException();
         }
 
@@ -119,7 +119,7 @@ public class RoadmapService {
     public void createRoadmapTypeFeedback(final Long roadmapStepId, final RoadmapTypeFeedbackRequest request,
                                           final Member member) {
         final RoadmapStep roadmapStep = roadmapStepRepository.findById(roadmapStepId).orElseThrow();
-        if (!roadmapStep.getRoadmap().isMine(member)) {
+        if (roadmapStep.getRoadmap().isNotMine(member)) {
             throw new RuntimeException();
         }
 
@@ -132,7 +132,7 @@ public class RoadmapService {
     public void createRoadmapEntireFeedback(final Long roadmapId, final RoadmapEntireFeedbackRequest request,
                                             final Member member) {
         final Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow();
-        if (!roadmap.isMine(member)) {
+        if (roadmap.isNotMine(member)) {
             throw new RuntimeException();
         }
 

@@ -67,7 +67,7 @@ public class Roadmap extends BaseEntity {
         this.statusType = IN_PROGRESS;
     }
 
-    public boolean isMine(final Member member) {
-        return this.member.equals(member);
+    public boolean isNotMine(final Member member) {
+        return !this.member.equals(member);
     }
 }
