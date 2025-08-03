@@ -184,7 +184,6 @@ public class RoadmapService {
         final List<Roadmap> roadmaps = Arrays.stream(aiResponses)
                 .map(ai -> {
                     final RoadmapType type = RoadmapType.valueOf(ai.type());
-
                     final Roadmap roadmap = Roadmap.builder()
                             .member(member)
                             .title(ai.title())
@@ -192,26 +191,23 @@ public class RoadmapService {
                             .roadmapType(type)
                             .build();
 
-                    final List<RoadmapStep> steps = ai.steps().stream()
-                            .map(aiStep -> {
-                                final RoadmapStep step = RoadmapStep.builder()
-                                        .roadmap(roadmap)
-                                        .stepNumber(aiStep.stepNumber())
-                                        .title(aiStep.stepTitle())
-                                        .description(aiStep.stepDescription())
-                                        .build();
+                    ai.steps().forEach(aiStep -> {
+                        final RoadmapStep step = RoadmapStep.builder()
+                                .roadmap(roadmap)
+                                .stepNumber(aiStep.stepNumber())
+                                .title(aiStep.stepTitle())
+                                .description(aiStep.stepDescription())
+                                .build();
 
-                                final List<RoadmapStepContent> contents = aiStep.contents().stream()
-                                        .map(aiContent -> RoadmapStepContent.builder()
-                                                .roadmapStep(step)
-                                                .content(aiContent.stepContent())
-                                                .build()).toList();
-
-                                step.getRoadmapStepContents().addAll(contents);
-                                return step;
-                            }).toList();
-
-                    roadmap.getSteps().addAll(steps);
+                        aiStep.contents().forEach(aiContent -> {
+                            final RoadmapStepContent content = RoadmapStepContent.builder()
+                                    .roadmapStep(step)
+                                    .content(aiContent.stepContent())
+                                    .build();
+                            step.addContent(content);
+                        });
+                        roadmap.addStep(step);
+                    });
                     return roadmap;
                 }).toList();
 

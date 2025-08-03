@@ -70,4 +70,8 @@ public class Roadmap extends BaseEntity {
     public boolean isNotMine(final Member member) {
         return !this.member.equals(member);
     }
+
+    public void addStep(final RoadmapStep step) {
+        this.steps.add(step);
+    }
 }
