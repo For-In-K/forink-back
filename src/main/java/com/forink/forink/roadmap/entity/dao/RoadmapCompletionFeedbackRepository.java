@@ -10,9 +10,10 @@ public interface RoadmapCompletionFeedbackRepository extends JpaRepository<Roadm
 
     @Query("SELECT DISTINCT f "
             + "FROM RoadmapCompletionFeedback f "
-            + "LEFT JOIN FETCH f.roadmap "
+            + "LEFT JOIN FETCH f.roadmap rm "
+            + "LEFT JOIN FETCH rm.member "
             + "LEFT JOIN RoadmapCompletionFeedbackRating r "
             + "ON f.id = r.completionFeedback.id AND r.raterId = :raterId "
-            + "WHERE r.id IS NULL")
+            + "WHERE r.id IS NULL AND rm.member.memberRoleType = 'ROLE_예비가이드'")
     List<RoadmapCompletionFeedback> findUnratedAllByRaterId(@Param("raterId") Long raterId);
 }
