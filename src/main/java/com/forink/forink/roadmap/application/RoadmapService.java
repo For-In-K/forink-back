@@ -9,8 +9,10 @@ import com.forink.forink.roadmap.application.dto.response.RoadmapTypeDetailRespo
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeListResponse;
 import com.forink.forink.roadmap.entity.Roadmap;
 import com.forink.forink.roadmap.entity.RoadmapStep;
+import com.forink.forink.roadmap.entity.RoadmapStepContent;
 import com.forink.forink.roadmap.entity.RoadmapType;
 import com.forink.forink.roadmap.entity.dao.RoadmapRepository;
+import com.forink.forink.roadmap.entity.dao.RoadmapStepContentRepository;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoadmapService {
 
     private final RoadmapRepository roadmapRepository;
+    private final RoadmapStepContentRepository roadmapStepContentRepository;
 
     public List<RoadmapListResponse> getAllRoadmapList(final Member member) {
         final List<Roadmap> roadmaps = roadmapRepository.findAllByMember(member);
@@ -74,5 +77,15 @@ public class RoadmapService {
                             contents);
                 })
                 .toList();
+    }
+
+    public void updateRoadmapIsChecked(final Long roadmapStepContentId, final Member member) {
+        final RoadmapStepContent roadmapStepContent = roadmapStepContentRepository.findById(roadmapStepContentId)
+                .orElseThrow();
+        if (!roadmapStepContent.getRoadmapStep().getRoadmap().isMine(member)){
+            throw new RuntimeException();
+        }
+
+        roadmapStepContent.updateIsChecked();
     }
 }

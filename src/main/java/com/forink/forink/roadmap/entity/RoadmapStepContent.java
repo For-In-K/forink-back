@@ -1,5 +1,7 @@
 package com.forink.forink.roadmap.entity;
 
+import static java.lang.Boolean.TRUE;
+
 import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,5 +40,9 @@ public class RoadmapStepContent extends BaseEntity {
         this.roadmapStep = roadmapStep;
         this.content = content;
         this.isChecked = false;
+    }
+
+    public void updateIsChecked() {
+        this.isChecked = (this.isChecked == null) ? TRUE : !this.isChecked;
     }
 }

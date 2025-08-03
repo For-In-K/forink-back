@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +40,12 @@ public class RoadmapController {
     public ResponseEntity<List<RoadmapTypeDetailResponse>> getRoadmapTypeDetails(@PathVariable final Long roadmapId,
                                                                                  @LoginMember final Member member) {
         return ResponseEntity.ok(roadmapService.getRoadmapTypeDetails(roadmapId, member));
+    }
+
+    @PatchMapping("/{roadmapStepContentId}")
+    public ResponseEntity<Void> updateRoadmapIsChecked(@PathVariable Long roadmapStepContentId,
+                                                       @LoginMember final Member member) {
+        roadmapService.updateRoadmapIsChecked(roadmapStepContentId, member);
+        return ResponseEntity.noContent().build();
     }
 }
