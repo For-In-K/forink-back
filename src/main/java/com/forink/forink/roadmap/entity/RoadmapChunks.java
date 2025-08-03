@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import org.hibernate.annotations.JdbcTypeCode;
 
 @Entity
@@ -49,5 +48,5 @@ public class RoadmapChunks extends BaseEntity {
 
     @JdbcTypeCode(JSON)
     @Column(columnDefinition = "json", nullable = false)
-    private Map<String, Objects> conditionalRules;
+    private Map<String, Object> conditionalRules;
 }
