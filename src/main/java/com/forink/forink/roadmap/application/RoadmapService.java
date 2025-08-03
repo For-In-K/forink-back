@@ -3,12 +3,16 @@ package com.forink.forink.roadmap.application;
 import static com.forink.forink.exam.entity.StatusType.COMPLETED;
 
 import com.forink.forink.member.entity.Member;
+import com.forink.forink.roadmap.application.dto.response.RoadmapContentResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapListResponse;
+import com.forink.forink.roadmap.application.dto.response.RoadmapTypeDetailResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeListResponse;
 import com.forink.forink.roadmap.entity.Roadmap;
+import com.forink.forink.roadmap.entity.RoadmapStep;
 import com.forink.forink.roadmap.entity.RoadmapType;
 import com.forink.forink.roadmap.entity.dao.RoadmapRepository;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,6 +53,26 @@ public class RoadmapService {
 
         return roadmaps.stream()
                 .map(r -> new RoadmapTypeListResponse(r.getId(), r.getTitle(), r.getStatusType()))
+                .toList();
+    }
+
+    public List<RoadmapTypeDetailResponse> getRoadmapTypeDetails(final Long roadmapId, final Member member) {
+        final Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow();
+        if (!roadmap.isMine(member)) {
+            throw new RuntimeException();
+        }
+
+        return roadmap.getSteps().stream()
+                .sorted(Comparator.comparingInt(RoadmapStep::getStepNumber))
+                .map(step -> {
+                    final List<RoadmapContentResponse> contents = step.getRoadmapStepContents().stream()
+                            .map(content -> new RoadmapContentResponse(content.getId(), content.getContent(),
+                                    content.getIsChecked()))
+                            .toList();
+
+                    return new RoadmapTypeDetailResponse(step.getStepNumber(), step.getTitle(), step.getDescription(),
+                            contents);
+                })
                 .toList();
     }
 }

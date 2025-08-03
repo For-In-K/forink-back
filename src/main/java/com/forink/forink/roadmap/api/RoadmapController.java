@@ -4,6 +4,7 @@ import com.forink.forink.global.security.annotation.LoginMember;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.roadmap.application.RoadmapService;
 import com.forink.forink.roadmap.application.dto.response.RoadmapListResponse;
+import com.forink.forink.roadmap.application.dto.response.RoadmapTypeDetailResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeListResponse;
 import com.forink.forink.roadmap.entity.RoadmapType;
 import java.util.List;
@@ -32,5 +33,11 @@ public class RoadmapController {
     public ResponseEntity<List<RoadmapTypeListResponse>> getRoadmapTypeList(@PathVariable final RoadmapType roadmapType,
                                                                             @LoginMember final Member member) {
         return ResponseEntity.ok(roadmapService.getRoadmapTypeList(roadmapType, member));
+    }
+
+    @GetMapping("/{roadmapId}")
+    public ResponseEntity<List<RoadmapTypeDetailResponse>> getRoadmapTypeDetails(@PathVariable final Long roadmapId,
+                                                                                 @LoginMember final Member member) {
+        return ResponseEntity.ok(roadmapService.getRoadmapTypeDetails(roadmapId, member));
     }
 }

@@ -1,7 +1,8 @@
 package com.forink.forink.roadmap.entity;
 
-import com.forink.forink.exam.entity.StatusType;
 import static com.forink.forink.exam.entity.StatusType.IN_PROGRESS;
+
+import com.forink.forink.exam.entity.StatusType;
 import com.forink.forink.global.base.BaseEntity;
 import com.forink.forink.member.entity.Member;
 import jakarta.persistence.CascadeType;
@@ -66,5 +67,9 @@ public class Roadmap extends BaseEntity {
         this.roadmapType = roadmapType;
         this.statusType = IN_PROGRESS;
         this.steps = steps;
+    }
+
+    public boolean isMine(final Member member) {
+        return this.member.equals(member);
     }
 }
