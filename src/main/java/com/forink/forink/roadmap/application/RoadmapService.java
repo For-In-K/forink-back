@@ -3,16 +3,19 @@ package com.forink.forink.roadmap.application;
 import static com.forink.forink.exam.entity.StatusType.COMPLETED;
 
 import com.forink.forink.member.entity.Member;
+import com.forink.forink.roadmap.application.dto.request.RoadmapEntireFeedbackRequest;
 import com.forink.forink.roadmap.application.dto.request.RoadmapTypeFeedbackRequest;
 import com.forink.forink.roadmap.application.dto.response.RoadmapContentResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapListResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeDetailResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeListResponse;
 import com.forink.forink.roadmap.entity.Roadmap;
+import com.forink.forink.roadmap.entity.RoadmapCompletionFeedback;
 import com.forink.forink.roadmap.entity.RoadmapStep;
 import com.forink.forink.roadmap.entity.RoadmapStepContent;
 import com.forink.forink.roadmap.entity.RoadmapStepFeedback;
 import com.forink.forink.roadmap.entity.RoadmapType;
+import com.forink.forink.roadmap.entity.dao.RoadmapCompletionFeedbackRepository;
 import com.forink.forink.roadmap.entity.dao.RoadmapRepository;
 import com.forink.forink.roadmap.entity.dao.RoadmapStepContentRepository;
 import com.forink.forink.roadmap.entity.dao.RoadmapStepFeedbackRepository;
@@ -35,6 +38,7 @@ public class RoadmapService {
     private final RoadmapStepContentRepository roadmapStepContentRepository;
     private final RoadmapStepRepository roadmapStepRepository;
     private final RoadmapStepFeedbackRepository roadmapStepFeedbackRepository;
+    private final RoadmapCompletionFeedbackRepository roadmapCompletionFeedbackRepository;
 
     public List<RoadmapListResponse> getAllRoadmapList(final Member member) {
         final List<Roadmap> roadmaps = roadmapRepository.findAllByMember(member);
@@ -98,13 +102,26 @@ public class RoadmapService {
     public void createRoadmapTypeFeedback(final Long roadmapStepId, final RoadmapTypeFeedbackRequest request,
                                           final Member member) {
         final RoadmapStep roadmapStep = roadmapStepRepository.findById(roadmapStepId).orElseThrow();
-        if (!roadmapStep.getRoadmap().isMine(member)){
+        if (!roadmapStep.getRoadmap().isMine(member)) {
             throw new RuntimeException();
         }
 
         roadmapStepFeedbackRepository.save(RoadmapStepFeedback.builder()
                 .roadmapStep(roadmapStep)
                 .type(request.roadmapAnswerType())
+                .build());
+    }
+
+    public void createRoadmapEntireFeedback(final Long roadmapId, final RoadmapEntireFeedbackRequest request,
+                                            final Member member) {
+        final Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow();
+        if (roadmap.isMine(member)) {
+            throw new RuntimeException();
+        }
+
+        roadmapCompletionFeedbackRepository.save(RoadmapCompletionFeedback.builder()
+                .roadmap(roadmap)
+                .content(request.content())
                 .build());
     }
 }
