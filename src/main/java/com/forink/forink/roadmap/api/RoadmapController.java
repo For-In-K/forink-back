@@ -43,7 +43,7 @@ public class RoadmapController {
     }
 
     @PatchMapping("/{roadmapStepContentId}")
-    public ResponseEntity<Void> updateRoadmapIsChecked(@PathVariable Long roadmapStepContentId,
+    public ResponseEntity<Void> updateRoadmapIsChecked(@PathVariable final Long roadmapStepContentId,
                                                        @LoginMember final Member member) {
         roadmapService.updateRoadmapIsChecked(roadmapStepContentId, member);
         return ResponseEntity.noContent().build();
