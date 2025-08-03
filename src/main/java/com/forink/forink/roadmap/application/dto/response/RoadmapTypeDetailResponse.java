@@ -7,6 +7,12 @@ public record RoadmapTypeDetailResponse(
         int stepNumber,
         String stepTitle,
         String stepDescription,
-        List<RoadmapContentResponse> contents
+        List<RoadmapContent> contents
 ) {
+    public record RoadmapContent(
+
+            Long stepContentId,
+            String stepContent,
+            boolean isChecked
+    ) {}
 }

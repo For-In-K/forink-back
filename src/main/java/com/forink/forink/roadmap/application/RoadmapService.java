@@ -11,7 +11,6 @@ import com.forink.forink.roadmap.application.dto.request.AiRoadmapGenerateReques
 import com.forink.forink.roadmap.application.dto.request.RoadmapEntireFeedbackRequest;
 import com.forink.forink.roadmap.application.dto.request.RoadmapTypeFeedbackRequest;
 import com.forink.forink.roadmap.application.dto.response.AiRoadmapGenerateResponse;
-import com.forink.forink.roadmap.application.dto.response.RoadmapContentResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapListResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeDetailResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeListResponse;
@@ -91,19 +90,8 @@ public class RoadmapService {
         if (roadmap.isNotMine(member)) {
             throw new RuntimeException();
         }
-
-        return roadmap.getSteps().stream()
-                .sorted(Comparator.comparingInt(RoadmapStep::getStepNumber))
-                .map(step -> {
-                    final List<RoadmapContentResponse> contents = step.getRoadmapStepContents().stream()
-                            .map(content -> new RoadmapContentResponse(content.getId(), content.getContent(),
-                                    content.getIsChecked()))
-                            .toList();
-
-                    return new RoadmapTypeDetailResponse(step.getStepNumber(), step.getTitle(), step.getDescription(),
-                            contents);
-                })
-                .toList();
+        
+        return getRoadmapTypeInfos(roadmap);
     }
 
     public void updateRoadmapIsChecked(final Long roadmapStepContentId, final Member member) {
@@ -161,6 +149,23 @@ public class RoadmapService {
                         .map(s -> new AiRoadmapGenerateRequest.Answer(s.getStepNumber(), s.getAnswer()))
                         .toList()
         );
+    }
+
+    private List<RoadmapTypeDetailResponse> getRoadmapTypeInfos(final Roadmap roadmap) {
+        return roadmap.getSteps().stream()
+                .sorted(Comparator.comparingInt(RoadmapStep::getStepNumber))
+                .map(step -> {
+                    final List<RoadmapTypeDetailResponse.RoadmapContent> contents = step.getRoadmapStepContents()
+                            .stream()
+                            .map(content -> new RoadmapTypeDetailResponse.RoadmapContent(content.getId(),
+                                    content.getContent(),
+                                    content.getIsChecked()))
+                            .toList();
+
+                    return new RoadmapTypeDetailResponse(step.getStepNumber(), step.getTitle(), step.getDescription(),
+                            contents);
+                })
+                .toList();
     }
 
     private AiRoadmapGenerateResponse[] callAiService(final AiRoadmapGenerateRequest aiRequest) {
