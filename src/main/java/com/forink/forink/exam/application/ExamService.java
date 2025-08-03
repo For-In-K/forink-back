@@ -1,7 +1,5 @@
 package com.forink.forink.exam.application;
 
-import static com.forink.forink.member.entity.MemberRoleType.ROLE_회원;
-
 import com.forink.forink.exam.application.dto.request.ExamAnswerRequest;
 import com.forink.forink.exam.application.dto.response.ExamAnswerResponse;
 import com.forink.forink.exam.entity.Exam;
@@ -9,8 +7,6 @@ import com.forink.forink.exam.entity.ExamStep;
 import com.forink.forink.exam.entity.dao.ExamRepository;
 import com.forink.forink.exam.entity.dao.ExamStepRepository;
 import com.forink.forink.member.entity.Member;
-import com.forink.forink.member.entity.dao.MemberRepository;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,20 +19,15 @@ public class ExamService {
 
     private final ExamRepository examRepository;
     private final ExamStepRepository examStepRepository;
-    private final MemberRepository memberRepository;
 
-    public void createExam() {
-        // todo : 로그인 기능 개발 완료 시 수정 필요
-        final Member tempMember = createFakeMember();
+    public void createExam(final Member member) {
         examRepository.save(Exam.builder()
-                .member(tempMember)
+                .member(member)
                 .build());
     }
 
-    public List<ExamAnswerResponse> getExam() {
-        // todo : 로그인 기능 개발 완료 시 수정 필요
-        final Member tempMember = createFakeMember();
-        final Exam exam = examRepository.findByMember(tempMember).orElseThrow();
+    public List<ExamAnswerResponse> getExam(final Member member) {
+        final Exam exam = examRepository.findByMember(member).orElseThrow();
         final List<ExamStep> steps = examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
 
         return steps.stream()
@@ -44,10 +35,8 @@ public class ExamService {
                 .toList();
     }
 
-    public void createExamStep(final ExamAnswerRequest request, final Integer stepNumber) {
-        // todo : 로그인 기능 개발 완료 시 수정 필요
-        final Member tempMember = createFakeMember();
-        final Exam exam = examRepository.findByMember(tempMember).orElseThrow();
+    public void createExamStep(final ExamAnswerRequest request, final Integer stepNumber, final Member member) {
+        final Exam exam = examRepository.findByMember(member).orElseThrow();
 
         examStepRepository.save(ExamStep.builder()
                 .exam(exam)
@@ -56,13 +45,4 @@ public class ExamService {
                 .build());
     }
 
-    private Member createFakeMember() {
-        return memberRepository.save(Member.builder()
-                .email("temp@pusan.ac.kr")
-                .googleId("tempId")
-                .name("tempName")
-                .memberRoleType(ROLE_회원)
-                .roadmaps(new ArrayList<>())
-                .build());
-    }
 }
