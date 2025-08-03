@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record GoogleUserInfo (
 
-        @JsonProperty("sub")
+        @JsonProperty("id")
         String googleId,
 
         String email,
