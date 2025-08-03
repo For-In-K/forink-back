@@ -21,7 +21,7 @@ public class RoadmapController {
     private final RoadmapService roadmapService;
 
     @GetMapping
-    public ResponseEntity<List<RoadmapListResponse>> getExam(@LoginMember final Member member) {
+    public ResponseEntity<List<RoadmapListResponse>> getAllRoadmapList(@LoginMember final Member member) {
         return ResponseEntity.ok(roadmapService.getAllRoadmapList(member));
     }
 }
