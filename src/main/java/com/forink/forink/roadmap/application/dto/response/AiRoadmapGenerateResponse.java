@@ -9,8 +9,8 @@ public record AiRoadmapGenerateResponse(
 
         @NotBlank
         String type,
-        @NotBlank
-        int order,
+        @NotNull
+        Integer order,
         @NotBlank
         String title,
         @NotNull
@@ -18,8 +18,8 @@ public record AiRoadmapGenerateResponse(
 ) {
     public record AiStep(
 
-            @NotBlank
-            int stepNumber,
+            @NotNull
+            Integer stepNumber,
             @NotBlank
             String stepTitle,
             @NotBlank

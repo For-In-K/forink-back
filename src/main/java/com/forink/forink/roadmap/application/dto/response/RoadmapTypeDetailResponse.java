@@ -6,8 +6,8 @@ import java.util.List;
 
 public record RoadmapTypeDetailResponse(
 
-        @NotBlank
-        int stepNumber,
+        @NotNull
+        Integer stepNumber,
         @NotBlank
         String stepTitle,
         @NotBlank
@@ -21,7 +21,7 @@ public record RoadmapTypeDetailResponse(
             Long stepContentId,
             @NotBlank
             String stepContent,
-            @NotBlank
-            boolean isChecked
+            @NotNull
+            Boolean isChecked
     ) {}
 }

@@ -17,9 +17,9 @@ public record AiRoadmapGenerateRequest(
 ) {
     public record Answer(
 
-            @NotBlank
-            int stepNumber,
-            @NotBlank
-            int answer
+            @NotNull
+            Integer stepNumber,
+            @NotNull
+            Integer answer
     ) {}
 }
