@@ -152,20 +152,33 @@ public class RoadmapService {
     }
 
     private List<RoadmapTypeDetailResponse> getRoadmapTypeInfos(final Roadmap roadmap) {
-        return roadmap.getSteps().stream()
+        final List<RoadmapStep> steps = roadmap.getSteps().stream()
                 .sorted(Comparator.comparingInt(RoadmapStep::getStepNumber))
-                .map(step -> {
-                    final List<RoadmapTypeDetailResponse.RoadmapContent> contents = step.getRoadmapStepContents()
-                            .stream()
-                            .map(content -> new RoadmapTypeDetailResponse.RoadmapContent(content.getId(),
-                                    content.getContent(),
-                                    content.getIsChecked()))
-                            .toList();
-
-                    return new RoadmapTypeDetailResponse(step.getStepNumber(), step.getTitle(), step.getDescription(),
-                            contents);
-                })
                 .toList();
+
+        final List<RoadmapStepContent> allContents = roadmapStepContentRepository.findAllByRoadmapStepIn(steps);
+
+        final Map<Long, List<RoadmapStepContent>> contentsByStepId = allContents.stream()
+                .collect(Collectors.groupingBy(c -> c.getRoadmapStep().getId()));
+
+        return steps.stream()
+                .map(step -> {
+                    List<RoadmapTypeDetailResponse.RoadmapContent> contents = contentsByStepId
+                            .getOrDefault(step.getId(), List.of())
+                            .stream()
+                            .map(content -> new RoadmapTypeDetailResponse.RoadmapContent(
+                                    content.getId(),
+                                    content.getContent(),
+                                    content.getIsChecked()
+                            )).toList();
+
+                    return new RoadmapTypeDetailResponse(
+                            step.getStepNumber(),
+                            step.getTitle(),
+                            step.getDescription(),
+                            contents
+                    );
+                }).toList();
     }
 
     private AiRoadmapGenerateResponse[] callAiService(final AiRoadmapGenerateRequest aiRequest) {
