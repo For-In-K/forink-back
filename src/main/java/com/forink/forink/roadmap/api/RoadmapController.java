@@ -71,4 +71,10 @@ public class RoadmapController {
         roadmapService.createRoadmapEntireFeedback(roadmapId, request, member);
         return ResponseEntity.status(CREATED).build();
     }
+
+    @PostMapping
+    public ResponseEntity<Void> createRoadmaps(@LoginMember final Member member) {
+        roadmapService.createRoadmaps(member);
+        return ResponseEntity.status(CREATED).build();
+    }
 }

@@ -48,12 +48,10 @@ public class RoadmapStep extends BaseEntity {
     private RoadmapStepFeedback stepFeedback;
 
     @Builder
-    private RoadmapStep(final Roadmap roadmap, final Integer stepNumber, final String title, final String description,
-                       final List<RoadmapStepContent> roadmapStepContents) {
+    private RoadmapStep(final Roadmap roadmap, final Integer stepNumber, final String title, final String description) {
         this.roadmap = roadmap;
         this.stepNumber = stepNumber;
         this.title = title;
         this.description = description;
-        this.roadmapStepContents = roadmapStepContents;
     }
 }

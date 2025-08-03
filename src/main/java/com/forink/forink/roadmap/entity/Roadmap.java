@@ -59,14 +59,12 @@ public class Roadmap extends BaseEntity {
     private RoadmapCompletionFeedback roadmapCompletionFeedback;
 
     @Builder
-    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType roadmapType,
-                    final List<RoadmapStep> steps) {
+    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType roadmapType) {
         this.member = member;
         this.title = title;
         this.order = order;
         this.roadmapType = roadmapType;
         this.statusType = IN_PROGRESS;
-        this.steps = steps;
     }
 
     public boolean isMine(final Member member) {

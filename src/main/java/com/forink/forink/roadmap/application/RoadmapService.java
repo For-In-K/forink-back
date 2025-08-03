@@ -2,9 +2,15 @@ package com.forink.forink.roadmap.application;
 
 import static com.forink.forink.exam.entity.StatusType.COMPLETED;
 
+import com.forink.forink.exam.entity.Exam;
+import com.forink.forink.exam.entity.ExamStep;
+import com.forink.forink.exam.entity.dao.ExamRepository;
+import com.forink.forink.exam.entity.dao.ExamStepRepository;
 import com.forink.forink.member.entity.Member;
+import com.forink.forink.roadmap.application.dto.request.AiRoadmapGenerateRequest;
 import com.forink.forink.roadmap.application.dto.request.RoadmapEntireFeedbackRequest;
 import com.forink.forink.roadmap.application.dto.request.RoadmapTypeFeedbackRequest;
+import com.forink.forink.roadmap.application.dto.response.AiRoadmapGenerateResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapContentResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapListResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeDetailResponse;
@@ -26,8 +32,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @Transactional
@@ -39,6 +49,13 @@ public class RoadmapService {
     private final RoadmapStepRepository roadmapStepRepository;
     private final RoadmapStepFeedbackRepository roadmapStepFeedbackRepository;
     private final RoadmapCompletionFeedbackRepository roadmapCompletionFeedbackRepository;
+
+    private final ExamRepository examRepository;
+    private final ExamStepRepository examStepRepository;
+
+    private final RestTemplate restTemplate;
+
+    private final static String aiUrl = "https://temp-ai-service.com/roadmaps";
 
     public List<RoadmapListResponse> getAllRoadmapList(final Member member) {
         final List<Roadmap> roadmaps = roadmapRepository.findAllByMember(member);
@@ -115,7 +132,7 @@ public class RoadmapService {
     public void createRoadmapEntireFeedback(final Long roadmapId, final RoadmapEntireFeedbackRequest request,
                                             final Member member) {
         final Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow();
-        if (roadmap.isMine(member)) {
+        if (!roadmap.isMine(member)) {
             throw new RuntimeException();
         }
 
@@ -124,4 +141,76 @@ public class RoadmapService {
                 .content(request.content())
                 .build());
     }
+
+    public void createRoadmaps(final Member member) {
+        final Exam exam = examRepository.findByMember(member).orElseThrow();
+        final List<ExamStep> examSteps = examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
+
+        final AiRoadmapGenerateRequest aiRequest = createAIRequest(member, exam, examSteps);
+        final AiRoadmapGenerateResponse[] aiResponses = callAiService(aiRequest);
+        saveRoadmaps(aiResponses, member);
+    }
+
+    private AiRoadmapGenerateRequest createAIRequest(final Member member, final Exam exam,
+                                                     final List<ExamStep> examSteps) {
+        return new AiRoadmapGenerateRequest(
+                member.getId(),
+                member.getMemberRoleType().name(),
+                exam.getId(),
+                examSteps.stream()
+                        .map(s -> new AiRoadmapGenerateRequest.Answer(s.getStepNumber(), s.getAnswer()))
+                        .toList()
+        );
+    }
+
+    private AiRoadmapGenerateResponse[] callAiService(final AiRoadmapGenerateRequest aiRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<AiRoadmapGenerateRequest> httpEntity = new HttpEntity<>(aiRequest, headers);
+
+        return restTemplate.postForObject(
+                aiUrl,
+                httpEntity,
+                AiRoadmapGenerateResponse[].class
+        );
+    }
+
+    private void saveRoadmaps(final AiRoadmapGenerateResponse[] aiResponses, final Member member) {
+        final List<Roadmap> roadmaps = Arrays.stream(aiResponses)
+                .map(ai -> {
+                    final RoadmapType type = RoadmapType.valueOf(ai.type());
+
+                    final Roadmap roadmap = Roadmap.builder()
+                            .member(member)
+                            .title(ai.title())
+                            .order(ai.order())
+                            .roadmapType(type)
+                            .build();
+
+                    final List<RoadmapStep> steps = ai.steps().stream()
+                            .map(aiStep -> {
+                                final RoadmapStep step = RoadmapStep.builder()
+                                        .roadmap(roadmap)
+                                        .stepNumber(aiStep.stepNumber())
+                                        .title(aiStep.stepTitle())
+                                        .description(aiStep.stepDescription())
+                                        .build();
+
+                                final List<RoadmapStepContent> contents = aiStep.contents().stream()
+                                        .map(aiContent -> RoadmapStepContent.builder()
+                                                .roadmapStep(step)
+                                                .content(aiContent.stepContent())
+                                                .build()).toList();
+
+                                step.getRoadmapStepContents().addAll(contents);
+                                return step;
+                            }).toList();
+
+                    roadmap.getSteps().addAll(steps);
+                    return roadmap;
+                }).toList();
+
+        roadmapRepository.saveAll(roadmaps);
+    }
+
 }
