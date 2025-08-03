@@ -6,6 +6,7 @@ import com.forink.forink.roadmap.application.RoadmapFeedbackService;
 import com.forink.forink.roadmap.application.dto.request.RoadmapFeedbackRatingRequest;
 import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackListResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackRatingListResponse;
+import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackRatingStatusResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import java.net.URI;
@@ -49,6 +50,12 @@ public class RoadmapFeedbackController {
     @Secured("ROLE_예비가이드")
     public ResponseEntity<List<RoadmapFeedbackRatingListResponse>> getPreGuideRoadmapFeedbackRatingList(@LoginMember final Member member) {
         return ResponseEntity.ok(roadmapFeedbackService.getPreGuideRoadmapFeedbackRatingList(member.getId()));
+    }
+
+    @GetMapping("/ratings/status")
+    @Secured("ROLE_예비가이드")
+    public ResponseEntity<RoadmapFeedbackRatingStatusResponse> getPreGuideRoadmapFeedbackRatingStatus(@LoginMember final Member member) {
+        return ResponseEntity.ok(roadmapFeedbackService.getPreGuideRoadmapFeedbackRatingStatus(member.getId()));
     }
 
 }
