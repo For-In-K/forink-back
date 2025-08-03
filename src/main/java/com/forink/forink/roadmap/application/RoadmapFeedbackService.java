@@ -2,6 +2,7 @@ package com.forink.forink.roadmap.application;
 
 import com.forink.forink.roadmap.application.dto.request.RoadmapFeedbackRatingRequest;
 import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackListResponse;
+import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackRatingListResponse;
 import com.forink.forink.roadmap.entity.RoadmapCompletionFeedback;
 import com.forink.forink.roadmap.entity.RoadmapCompletionFeedbackRating;
 import com.forink.forink.roadmap.entity.dao.RoadmapCompletionFeedbackRatingRepository;
@@ -40,6 +41,10 @@ public class RoadmapFeedbackService {
                 .help(request.helpScore())
                 .recommend(request.recommendScore())
                 .build());
+    }
+
+    public List<RoadmapFeedbackRatingListResponse> getPreGuideRoadmapFeedbackRatingList(final Long memberId) {
+        return roadmapFeedbackRatingRepository.findAllStatsByAuthor(memberId);
     }
 
 }
