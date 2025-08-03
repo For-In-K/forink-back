@@ -3,6 +3,7 @@ package com.forink.forink.roadmap.application;
 import static com.forink.forink.exam.entity.StatusType.COMPLETED;
 
 import com.forink.forink.member.entity.Member;
+import com.forink.forink.roadmap.application.dto.request.RoadmapTypeFeedbackRequest;
 import com.forink.forink.roadmap.application.dto.response.RoadmapContentResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapListResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapTypeDetailResponse;
@@ -10,9 +11,12 @@ import com.forink.forink.roadmap.application.dto.response.RoadmapTypeListRespons
 import com.forink.forink.roadmap.entity.Roadmap;
 import com.forink.forink.roadmap.entity.RoadmapStep;
 import com.forink.forink.roadmap.entity.RoadmapStepContent;
+import com.forink.forink.roadmap.entity.RoadmapStepFeedback;
 import com.forink.forink.roadmap.entity.RoadmapType;
 import com.forink.forink.roadmap.entity.dao.RoadmapRepository;
 import com.forink.forink.roadmap.entity.dao.RoadmapStepContentRepository;
+import com.forink.forink.roadmap.entity.dao.RoadmapStepFeedbackRepository;
+import com.forink.forink.roadmap.entity.dao.RoadmapStepRepository;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -29,6 +33,8 @@ public class RoadmapService {
 
     private final RoadmapRepository roadmapRepository;
     private final RoadmapStepContentRepository roadmapStepContentRepository;
+    private final RoadmapStepRepository roadmapStepRepository;
+    private final RoadmapStepFeedbackRepository roadmapStepFeedbackRepository;
 
     public List<RoadmapListResponse> getAllRoadmapList(final Member member) {
         final List<Roadmap> roadmaps = roadmapRepository.findAllByMember(member);
@@ -82,10 +88,23 @@ public class RoadmapService {
     public void updateRoadmapIsChecked(final Long roadmapStepContentId, final Member member) {
         final RoadmapStepContent roadmapStepContent = roadmapStepContentRepository.findById(roadmapStepContentId)
                 .orElseThrow();
-        if (!roadmapStepContent.getRoadmapStep().getRoadmap().isMine(member)){
+        if (!roadmapStepContent.getRoadmapStep().getRoadmap().isMine(member)) {
             throw new RuntimeException();
         }
 
         roadmapStepContent.updateIsChecked();
+    }
+
+    public void createRoadmapTypeFeedback(final Long roadmapStepId, final RoadmapTypeFeedbackRequest request,
+                                          final Member member) {
+        final RoadmapStep roadmapStep = roadmapStepRepository.findById(roadmapStepId).orElseThrow();
+        if (!roadmapStep.getRoadmap().isMine(member)){
+            throw new RuntimeException();
+        }
+
+        roadmapStepFeedbackRepository.save(RoadmapStepFeedback.builder()
+                .roadmapStep(roadmapStep)
+                .type(request.roadmapAnswerType())
+                .build());
     }
 }
