@@ -4,13 +4,15 @@ on:
   push:
     branches:
       - develop
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up JDK 17 (Corretto)
@@ -19,19 +21,24 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: Build with Gradle
+      - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Setup SSH key
+      - name: Setup SSH private key
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
           chmod 600 key.pem
 
-      - name: Copy JAR to EC2
+      - name: Add EC2 host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy built JAR file to EC2
         run: |
           scp -i key.pem build/libs/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/
 
-      - name: Restart systemd service
+      - name: Restart backend service on EC2
         run: |
           ssh -i key.pem ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
 
