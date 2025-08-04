@@ -1,4 +1,4 @@
-name: Build and Deploy with systemd
+name: Build and Deploy ForinK Backend Server
 
 on:
   push:
@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK 17 (Corretto)
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'corretto'
 
       - name: Build with Gradle
         run: ./gradlew clean build -x test
