@@ -1,11 +1,11 @@
 package com.forink.forink.roadmap.application.dto.response;
 
 import com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record RoadmapFeedbackRatingStatusResponse(
 
-        @NotBlank
+        @NotNull
         RoadmapFeedbackRatingStatusType ratingStatus
 ) {
 }
