@@ -24,12 +24,31 @@ jobs:
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Setup SSH private key and known_hosts
+      - name: Setup SSH private key and known_hosts (with debug)
         run: |
+          set -eux
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
+
+          echo ">>> SSH key first 50 chars:"
+          echo "${{ secrets.EC2_SSH_KEY }}" | head -c 50
+          echo
+
+          echo ">>> Write SSH key to ~/.ssh/key.pem"
+          cat <<EOF > ~/.ssh/key.pem
+      ${{ secrets.EC2_SSH_KEY }}
+      EOF
+
+          echo ">>> ~/.ssh/key.pem permission & first 5 lines:"
+          ls -l ~/.ssh/key.pem
+          head -5 ~/.ssh/key.pem
+
           chmod 600 ~/.ssh/key.pem
+
+          echo ">>> ssh-keyscan output:"
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+          echo ">>> ~/.ssh/known_hosts content:"
+          cat ~/.ssh/known_hosts
 
       - name: Copy built JAR file to EC2
         run: |
