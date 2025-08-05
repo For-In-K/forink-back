@@ -1,4 +1,4 @@
-name: Deploy ForinK Backend Server
+name: Build and Deploy ForinK Backend Server
 
 on:
   push:
@@ -24,20 +24,17 @@ jobs:
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Setup SSH keys and known_hosts
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
           chmod 600 ~/.ssh/key.pem
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
 
       - name: Copy built JAR file to EC2
         run: |
-          scp build/libs/forink-0.0.1-SNAPSHOT.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/forink-backend.jar
-      
+          scp -i ~/.ssh/key.pem -o StrictHostKeyChecking=no build/libs/forink-0.0.1-SNAPSHOT.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/forink-backend.jar
+
       - name: Restart backend service on EC2
         run: |
-          ssh -i ~/.ssh/key.pem ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
-
+          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
