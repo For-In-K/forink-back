@@ -27,12 +27,16 @@ public class ExamService {
     }
 
     public List<ExamAnswerResponse> getExam(final Member member) {
-        final Exam exam = examRepository.findByMember(member).orElseThrow();
-        final List<ExamStep> steps = examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
+        final List<ExamStep> steps = getExamSteps(member);
 
         return steps.stream()
                 .map(s -> new ExamAnswerResponse(s.getStepNumber(), s.getAnswer()))
                 .toList();
+    }
+
+    public List<ExamStep> getExamSteps(final Member member) {
+        final Exam exam = examRepository.findByMember(member).orElseThrow();
+        return examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
     }
 
     public void createExamStep(final ExamAnswerRequest request, final Integer stepNumber, final Member member) {
