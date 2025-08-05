@@ -1,33 +1,29 @@
-<<<<<<< HEAD
----
-name: Build and Deploy ForinK Backend Server
-=======
 name: Build and Deploy ForinK Backend Server
 
->>>>>>> 81e592be305fa601298c51ed27e67bad1ecf8d71
 on:
   push:
     branches:
       - develop
-  workflow_dispatch: null
+  workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up JDK 17 (Corretto)
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
-          distribution: corretto
+          java-version: '17'
+          distribution: 'corretto'
+
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
-<<<<<<< HEAD
-=======
 
->>>>>>> 81e592be305fa601298c51ed27e67bad1ecf8d71
       - name: Setup SSH
         run: |
           set -e
@@ -36,18 +32,6 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" | sed 's/\\n/\n/g' > ~/.ssh/key.pem
           chmod 600 ~/.ssh/key.pem
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-<<<<<<< HEAD
-      - name: Copy built JAR file to EC2
-        run: >
-          scp -i ~/.ssh/key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=30
-          build/libs/forink-0.0.1-SNAPSHOT.jar ec2-user@${{ secrets.EC2_HOST
-          }}:/home/ec2-user/forink-back/forink-backend.jar
-      - name: Restart backend service on EC2
-        run: >
-          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=30
-          ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
-
-=======
 
       - name: Copy built JAR file to EC2
         run: |
@@ -55,5 +39,4 @@ jobs:
 
       - name: Restart backend service on EC2
         run: |
-          ssh -v -i ~/.ssh/key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=30 ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
->>>>>>> 81e592be305fa601298c51ed27e67bad1ecf8d71
+          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=30 ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
