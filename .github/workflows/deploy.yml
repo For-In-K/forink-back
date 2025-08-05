@@ -1,4 +1,4 @@
-name: Build and Deploy ForinK Backend Server
+name: Build and Deploy ForinK Back Server
 
 on:
   push:
