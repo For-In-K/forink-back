@@ -35,8 +35,8 @@ jobs:
 
           echo ">>> Write SSH key to ~/.ssh/key.pem"
           cat <<EOF > ~/.ssh/key.pem
-      ${{ secrets.EC2_SSH_KEY }}
-      EOF
+${{ secrets.EC2_SSH_KEY }}
+EOF
 
           echo ">>> ~/.ssh/key.pem permission & first 5 lines:"
           ls -l ~/.ssh/key.pem
