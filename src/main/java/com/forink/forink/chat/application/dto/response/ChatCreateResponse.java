@@ -1,5 +1,6 @@
 package com.forink.forink.chat.application.dto.response;
 
+import com.forink.forink.chat.entity.Chat;
 import jakarta.validation.constraints.NotNull;
 
 public record ChatCreateResponse(
@@ -8,7 +9,7 @@ public record ChatCreateResponse(
         Long chatId
 ) {
 
-    public static ChatCreateResponse from(Long chatId) {
-        return new ChatCreateResponse(chatId);
+    public static ChatCreateResponse from(Chat chat) {
+        return new ChatCreateResponse(chat.getId());
     }
 }

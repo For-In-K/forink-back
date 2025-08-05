@@ -20,9 +20,8 @@ public class ChatController {
 
     @PostMapping
     public ResponseEntity<ChatCreateResponse> createChat(@LoginMember final Member member) {
-        final Long chatId = chatService.createChat(member);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ChatCreateResponse.from(chatId));
+                .body(chatService.createChat(member));
     }
 
 }
