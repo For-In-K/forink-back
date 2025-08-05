@@ -25,20 +25,20 @@ public class MemberService {
         return googleClient.createGoogleAuthorizationUrl();
     }
 
-    public OAuthLoginResponse processGoogleOAuthCallback(String code) {
-        GoogleUserInfo googleUserInfo = googleClient.getGoogleUserInfoByCode(code);
+    public OAuthLoginResponse processGoogleOAuthCallback(final String code) {
+        final GoogleUserInfo googleUserInfo = googleClient.getGoogleUserInfoByCode(code);
         return memberRepository.findByEmail(googleUserInfo.email())
                 .map(this::loginExistingMember)
                 .orElseGet(() -> registerAndLoginGoogleMember(googleUserInfo));
     }
 
-    private OAuthLoginResponse registerAndLoginGoogleMember(GoogleUserInfo googleUserInfo) {
-        Member newMember = memberRegistrationService.registerNewGoogleMember(googleUserInfo);
+    private OAuthLoginResponse registerAndLoginGoogleMember(final GoogleUserInfo googleUserInfo) {
+        final Member newMember = memberRegistrationService.registerNewGoogleMember(googleUserInfo);
         return loginExistingMember(newMember);
     }
 
-    private OAuthLoginResponse loginExistingMember(Member member) {
-        String token = jwtTokenProvider.generateAccessToken(
+    private OAuthLoginResponse loginExistingMember(final Member member) {
+        final String token = jwtTokenProvider.generateAccessToken(
                 String.valueOf(member.getId()),
                 member.getMemberRoleType().name(),
                 member.getEmail()

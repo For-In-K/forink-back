@@ -34,8 +34,8 @@ public class ChatController {
 
     @PostMapping("/{botId}/messages")
     public ResponseEntity<ChatAnswerResponse> sendMessage(@LoginMember final Member member,
-                                                          @PathVariable @Min(1) Long botId,
-                                                          @Valid @RequestBody ChatMessageRequest request) {
+                                                          @PathVariable @Min(1) final Long botId,
+                                                          @Valid @RequestBody final ChatMessageRequest request) {
         return ResponseEntity.ok(chatService.sendMessage(member, botId, request.message()));
     }
 
