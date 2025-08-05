@@ -1,4 +1,4 @@
-name: Build and Deploy Forink Back Server
+name: Build and Deploy ForinK Back Server
 
 on:
   push:
@@ -24,13 +24,20 @@ jobs:
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Add SSH private key to the agent
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+      - name: Setup SSH keys and known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
+          chmod 600 ~/.ssh/key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
       - name: Copy built JAR file to EC2
-        run: scp build/libs/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/
+        run: |
+          scp -i ~/.ssh/key.pem build/libs/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/
 
       - name: Restart backend service on EC2
-        run: ssh ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
+        run: |
+          ssh -i ~/.ssh/key.pem ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
+
