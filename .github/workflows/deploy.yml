@@ -1,4 +1,4 @@
-name: Build and Deploy ForinK Back Server
+name: Deploy ForinK Backend Server
 
 on:
   push:
@@ -35,8 +35,8 @@ jobs:
 
       - name: Copy built JAR file to EC2
         run: |
-          scp -i ~/.ssh/key.pem build/libs/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/
-
+          scp build/libs/forink-0.0.1-SNAPSHOT.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/forink-backend.jar
+      
       - name: Restart backend service on EC2
         run: |
           ssh -i ~/.ssh/key.pem ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
