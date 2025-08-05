@@ -24,21 +24,18 @@ jobs:
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
-      - name: Setup SSH private key
-        run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-          chmod 600 key.pem
-
-      - name: Add EC2 host to known_hosts
+      - name: Setup SSH private key and known_hosts
         run: |
           mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
+          chmod 600 ~/.ssh/key.pem
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Copy built JAR file to EC2
         run: |
-          scp -i key.pem build/libs/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/
+          scp -i ~/.ssh/key.pem build/libs/*.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/
 
       - name: Restart backend service on EC2
         run: |
-          ssh -i key.pem ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
+          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=yes ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
 
