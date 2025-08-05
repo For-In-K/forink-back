@@ -1,43 +1,39 @@
-name: Deploy ForinK Backend Server
-
+---
+name: Build and Deploy ForinK Backend Server
 on:
   push:
     branches:
       - develop
-  workflow_dispatch:
-
+  workflow_dispatch: null
 jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up JDK 17 (Corretto)
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'corretto'
-
+          java-version: "17"
+          distribution: corretto
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
-
-      - name: Setup SSH keys and known_hosts
+      - name: Setup SSH
         run: |
+          set -e
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/key.pem
+          echo "${{ secrets.EC2_SSH_KEY }}" | sed 's/\\n/\n/g' > ~/.ssh/key.pem
           chmod 600 ~/.ssh/key.pem
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
       - name: Copy built JAR file to EC2
-        run: |
-          scp build/libs/forink-0.0.1-SNAPSHOT.jar ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/forink-back/forink-backend.jar
-      
+        run: >
+          scp -i ~/.ssh/key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=30
+          build/libs/forink-0.0.1-SNAPSHOT.jar ec2-user@${{ secrets.EC2_HOST
+          }}:/home/ec2-user/forink-back/forink-backend.jar
       - name: Restart backend service on EC2
-        run: |
-          ssh -i ~/.ssh/key.pem ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
+        run: >
+          ssh -i ~/.ssh/key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=30
+          ec2-user@${{ secrets.EC2_HOST }} sudo systemctl restart forink-backend
 
