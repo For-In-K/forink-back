@@ -2,9 +2,14 @@ package com.forink.forink.global.security.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.FAILED_TO_GET_ACCESS_TOKEN;
+import static com.forink.forink.global.error.ErrorCode.FAILED_TO_GET_OAUTH_USERINFO;
+import static com.forink.forink.global.error.ErrorCode.OAUTH_AUTHORIZATION_FAILED;
+import static com.forink.forink.global.error.ErrorCode.OAUTH_NETWORK_UNAVAILABLE;
+import com.forink.forink.global.security.data.OAuthConstants;
 import com.forink.forink.global.security.dto.GoogleOAuthToken;
 import com.forink.forink.global.security.dto.GoogleUserInfo;
-import com.forink.forink.global.security.data.OAuthConstants;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import java.util.Collections;
 import java.util.List;
@@ -83,9 +88,9 @@ public class GoogleClient {
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 return responseEntity;
             }
-            throw new RuntimeException("Could not get access token");
+            throw new BusinessException(OAUTH_AUTHORIZATION_FAILED);
         } catch (RestClientException e) {
-            throw new RuntimeException("Could not request access token", e);
+            throw new BusinessException(OAUTH_NETWORK_UNAVAILABLE);
         }
     }
 
@@ -93,11 +98,11 @@ public class GoogleClient {
         try {
             GoogleOAuthToken googleOAuthToken = objectMapper.readValue(response.getBody(), GoogleOAuthToken.class);
             if (googleOAuthToken == null || googleOAuthToken.token() == null) {
-                throw new RuntimeException("Could not get access token");
+                throw new BusinessException(FAILED_TO_GET_ACCESS_TOKEN);
             }
             return googleOAuthToken;
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Could not parse access token", e);
+            throw new BusinessException(FAILED_TO_GET_ACCESS_TOKEN);
         }
     }
 
@@ -116,7 +121,7 @@ public class GoogleClient {
                     String.class
             );
         } catch (RestClientException e) {
-            throw new RuntimeException("Could not get user info", e);
+            throw new BusinessException(OAUTH_NETWORK_UNAVAILABLE);
         }
     }
 
@@ -124,11 +129,11 @@ public class GoogleClient {
         try {
             GoogleUserInfo googleUserInfo = objectMapper.readValue(response.getBody(), GoogleUserInfo.class);
             if (googleUserInfo == null) {
-                throw new RuntimeException("Could not get user info");
+                throw new BusinessException(FAILED_TO_GET_OAUTH_USERINFO);
             }
             return googleUserInfo;
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Could not parse user info", e);
+            throw new BusinessException(FAILED_TO_GET_OAUTH_USERINFO);
         }
     }
 
