@@ -15,7 +15,7 @@ public enum ErrorCode {
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 회원을 찾을 수 없습니다."),
     // Exam
-
+    EXAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 진단 검사 항목을 찾을 수 없습니다."),
     // Resume
 
     // Roadmap

@@ -6,6 +6,8 @@ import com.forink.forink.exam.entity.Exam;
 import com.forink.forink.exam.entity.ExamStep;
 import com.forink.forink.exam.entity.dao.ExamRepository;
 import com.forink.forink.exam.entity.dao.ExamStepRepository;
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.EXAM_NOT_FOUND;
 import com.forink.forink.member.entity.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +37,14 @@ public class ExamService {
     }
 
     public List<ExamStep> getExamSteps(final Member member) {
-        final Exam exam = examRepository.findByMember(member).orElseThrow();
+        final Exam exam = examRepository.findByMember(member)
+                .orElseThrow(() -> new BusinessException(EXAM_NOT_FOUND));
         return examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
     }
 
     public void createExamStep(final ExamAnswerRequest request, final Integer stepNumber, final Member member) {
-        final Exam exam = examRepository.findByMember(member).orElseThrow();
+        final Exam exam = examRepository.findByMember(member)
+                .orElseThrow(() -> new BusinessException(EXAM_NOT_FOUND));
 
         examStepRepository.save(ExamStep.builder()
                 .exam(exam)
