@@ -19,6 +19,8 @@ public enum ErrorCode {
     // Resume
     RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이력서를 찾을 수 없습니다."),
     // Roadmap
+    ROADMAP_ACCESS_DENIED(HttpStatus.FORBIDDEN, "다른 회원의 로드맵에 접근할 수 없습니다."),
+    ROADMAP_FEEDBACK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 로드맵 피드백을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
