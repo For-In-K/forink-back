@@ -17,7 +17,7 @@ public enum ErrorCode {
     // Exam
     EXAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 진단 검사 항목을 찾을 수 없습니다."),
     // Resume
-
+    RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이력서를 찾을 수 없습니다."),
     // Roadmap
     ;
 

@@ -1,5 +1,7 @@
 package com.forink.forink.resume.application;
 
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.RESUME_NOT_FOUND;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.resume.application.dto.response.ResumeResponse;
 import com.forink.forink.resume.domain.ResumeStepUpdater;
@@ -25,7 +27,7 @@ public class ResumeService {
     @Transactional
     public void submitResume(final Long memberId) {
         Resume resume = resumeRepository.findByMember_Id(memberId)
-                .orElseThrow(() -> new RuntimeException("Resume not found"));
+                .orElseThrow(() -> new BusinessException(RESUME_NOT_FOUND));
         Member member = resume.getMember();
 
         resume.complete();
@@ -34,7 +36,7 @@ public class ResumeService {
 
     public ResumeResponse getResume(final Long memberId) {
         Resume resume = resumeRepository.findByMember_Id(memberId)
-                .orElseThrow(() -> new RuntimeException("Resume not found"));
+                .orElseThrow(() -> new BusinessException(RESUME_NOT_FOUND));
         return ResumeResponse.from(resume);
     }
 
@@ -43,7 +45,7 @@ public class ResumeService {
                                    final Integer stepNumber,
                                    final String answer) {
         Resume resume = resumeRepository.findByMember_Id(memberId)
-                .orElseThrow(() -> new RuntimeException("Resume not found"));
+                .orElseThrow(() -> new BusinessException(RESUME_NOT_FOUND));
         ResumeStepUpdater updater = ResumeStepUpdater.from(stepNumber);
         updater.update(resume, answer);
     }
