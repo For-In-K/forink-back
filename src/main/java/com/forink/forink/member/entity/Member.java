@@ -1,5 +1,7 @@
 package com.forink.forink.member.entity;
 
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.ONLY_REGULAR_MEMBER_ELIGIBLE_FOR_PREGUIDE;
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_예비가이드;
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_회원;
 
@@ -62,7 +64,7 @@ public class Member extends BaseEntity {
 
     public void qualifyAsPreGuide() {
         if (this.memberRoleType != ROLE_회원) {
-            throw new IllegalStateException("오직 일반 회원만 예비 가이드 자격을 얻을 수 있습니다.");
+            throw new BusinessException(ONLY_REGULAR_MEMBER_ELIGIBLE_FOR_PREGUIDE);
         }
         this.memberRoleType = ROLE_예비가이드;
     }

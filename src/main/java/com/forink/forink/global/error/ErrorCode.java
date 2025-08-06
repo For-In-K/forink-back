@@ -14,10 +14,13 @@ public enum ErrorCode {
     OAUTH_NETWORK_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "소셜 로그인 과정 중 네트워크 오류가 발생했습니다."),
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 회원을 찾을 수 없습니다."),
+    ONLY_REGULAR_MEMBER_ELIGIBLE_FOR_PREGUIDE(HttpStatus.FORBIDDEN, "오직 일반 회원만 예비 가이드 자격을 얻을 수 있습니다."),
     // Exam
     EXAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 진단 검사 항목을 찾을 수 없습니다."),
     // Resume
     RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이력서를 찾을 수 없습니다."),
+    REQUIRED_ANSWERS_NOT_COMPLETED(HttpStatus.BAD_REQUEST, "모든 필수 답변이 작성되지 않아 이력서를 완료할 수 없습니다."),
+    RESUME_STEP_INACCESSIBLE(HttpStatus.BAD_REQUEST, "접근할 수 없는 이력서 페이지입니다."),
     // Roadmap
     ROADMAP_ACCESS_DENIED(HttpStatus.FORBIDDEN, "다른 회원의 로드맵에 접근할 수 없습니다."),
     ROADMAP_FEEDBACK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 로드맵 피드백을 찾을 수 없습니다."),

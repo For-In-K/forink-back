@@ -1,5 +1,7 @@
 package com.forink.forink.resume.domain;
 
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.RESUME_STEP_INACCESSIBLE;
 import com.forink.forink.resume.entity.Resume;
 import java.util.Arrays;
 import java.util.Objects;
@@ -35,7 +37,7 @@ public enum ResumeStepUpdater {
         return Arrays.stream(values())
                 .filter(updater -> Objects.equals(updater.stepNumber, stepNumber))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Invalid step: " + stepNumber));
+                .orElseThrow(() -> new BusinessException(RESUME_STEP_INACCESSIBLE));
     }
 
 }

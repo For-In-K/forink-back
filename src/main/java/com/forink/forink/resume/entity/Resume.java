@@ -4,6 +4,8 @@ import static com.forink.forink.exam.entity.StatusType.COMPLETED;
 import static com.forink.forink.exam.entity.StatusType.IN_PROGRESS;
 
 import com.forink.forink.exam.entity.StatusType;
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.REQUIRED_ANSWERS_NOT_COMPLETED;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.global.base.BaseEntity;
 import jakarta.persistence.Column;
@@ -104,7 +106,7 @@ public class Resume extends BaseEntity {
             return;
         }
         if (!areAllAnswersFilled()) {
-            throw new IllegalStateException("모든 필수 답변이 작성되지 않아 이력서를 완료할 수 없습니다.");
+            throw new BusinessException(REQUIRED_ANSWERS_NOT_COMPLETED);
         }
         this.statusType = COMPLETED;
     }
