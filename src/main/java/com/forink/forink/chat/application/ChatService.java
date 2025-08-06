@@ -12,6 +12,10 @@ import static com.forink.forink.chat.entity.ChatSenderType.USER;
 import com.forink.forink.chat.entity.dao.ChatMessageRepository;
 import com.forink.forink.chat.entity.dao.ChatRepository;
 import com.forink.forink.exam.application.ExamService;
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.AI_NETWORK_UNAVAILABLE;
+import static com.forink.forink.global.error.ErrorCode.CHAT_NOT_FOUND;
+import static com.forink.forink.global.error.ErrorCode.FAILED_TO_GET_CHAT_ANSWER;
 import com.forink.forink.member.entity.Member;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -51,7 +55,7 @@ public class ChatService {
                                           final Long chatId,
                                           final String message) {
         final Chat chat = chatRepository.findById(chatId)
-                .orElseThrow(() -> new IllegalArgumentException("chat not found"));
+                .orElseThrow(() -> new BusinessException(CHAT_NOT_FOUND));
 
         saveChatMessage(chat, message, USER);
 
@@ -63,7 +67,7 @@ public class ChatService {
         final ChatAnswerResponse aiChatResponse = callAiChatService(aiChatRequest, chat.getId());
 
         if (aiChatResponse.chatAnswer() == null) {
-            throw new RuntimeException("챗봇 답변이 없습니다.");
+            throw new BusinessException(FAILED_TO_GET_CHAT_ANSWER);
         }
 
         saveChatMessage(chat, aiChatResponse.chatAnswer(), AI);
@@ -99,9 +103,9 @@ public class ChatService {
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 return response.getBody();
             }
-            throw new RuntimeException("챗봇 답변을 수신할 수 없습니다.");
+            throw new BusinessException(FAILED_TO_GET_CHAT_ANSWER);
         } catch (RestClientException e) {
-            throw new RuntimeException("AI 서버에 요청할 수 없습니다.");
+            throw new BusinessException(AI_NETWORK_UNAVAILABLE);
         }
     }
 

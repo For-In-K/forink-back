@@ -1,5 +1,7 @@
 package com.forink.forink.global.security;
 
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.MEMBER_NOT_FOUND;
 import com.forink.forink.global.security.data.MemberPrincipal;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.dao.MemberRepository;
@@ -19,7 +21,7 @@ public class MemberPrincipalService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         Long memberId = Long.parseLong(userId);
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("NOT_FOUND_MEMBER"));
+                .orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
 
         return new MemberPrincipal(
                 member.getId(),

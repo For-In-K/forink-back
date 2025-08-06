@@ -1,5 +1,7 @@
 package com.forink.forink.roadmap.application;
 
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.ROADMAP_FEEDBACK_NOT_FOUND;
 import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.ALMOST;
 import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.IN_PROGRESS;
 
@@ -37,7 +39,7 @@ public class RoadmapFeedbackService {
                                                     final Long feedbackId,
                                                     final RoadmapFeedbackRatingRequest request) {
         RoadmapCompletionFeedback feedback = roadmapFeedbackRepository.findById(feedbackId)
-                .orElseThrow(() -> new RuntimeException("Feedback Not Found"));
+                .orElseThrow(() -> new BusinessException(ROADMAP_FEEDBACK_NOT_FOUND));
 
         roadmapFeedbackRatingRepository.save(RoadmapCompletionFeedbackRating.builder()
                 .completionFeedback(feedback)

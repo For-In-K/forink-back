@@ -1,5 +1,7 @@
 package com.forink.forink.global.security.annotation;
 
+import com.forink.forink.global.error.BusinessException;
+import static com.forink.forink.global.error.ErrorCode.MEMBER_NOT_FOUND;
 import com.forink.forink.global.security.data.MemberPrincipal;
 import com.forink.forink.member.entity.dao.MemberRepository;
 import lombok.NonNull;
@@ -33,7 +35,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         if (authentication != null && authentication.getPrincipal() instanceof MemberPrincipal principal) {
             Long memberId = principal.memberId();
             return memberRepository.findById(memberId)
-                    .orElseThrow(() -> new RuntimeException("Member not found"));
+                    .orElseThrow(() -> new BusinessException(MEMBER_NOT_FOUND));
         }
 
         return null;
