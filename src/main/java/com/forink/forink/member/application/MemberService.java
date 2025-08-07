@@ -6,6 +6,7 @@ import com.forink.forink.global.security.util.JwtTokenProvider;
 import com.forink.forink.member.application.dto.response.OAuthLoginResponse;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.dao.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class MemberService {
         return googleClient.createGoogleAuthorizationUrl();
     }
 
+    @Transactional
     public OAuthLoginResponse processGoogleOAuthCallback(final String code) {
         final GoogleUserInfo googleUserInfo = googleClient.getGoogleUserInfoByCode(code);
         return memberRepository.findByEmail(googleUserInfo.email())
