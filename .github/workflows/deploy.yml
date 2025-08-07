@@ -56,6 +56,13 @@ jobs:
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
+      # 디버깅용
+      - name: Verify JAR contents
+        run: |
+          echo "--- Verifying contents of the generated JAR file ---"
+          jar -tf build/libs/*[!plain].jar | grep "application-secret.yml" || echo "SECRET FILE NOT FOUND IN JAR"
+          echo "------------------------------------------------------"
+
       - name: Upload JAR to S3
         run: aws s3 cp build/libs/*[!plain].jar s3://${{ secrets.S3_BUCKET_NAME }}/forink-0.0.1-SNAPSHOT.jar
 
