@@ -26,7 +26,9 @@ public enum ErrorCode {
     ROADMAP_FEEDBACK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 로드맵 피드백을 찾을 수 없습니다."),
     // Chat
     CHAT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 챗봇을 찾을 수 없습니다."),
-    FAILED_TO_GET_CHAT_ANSWER(HttpStatus.INTERNAL_SERVER_ERROR, "챗봇 답변을 가져오는 데 실패했습니다."),
+    // AI
+    FAILED_TO_GET_CHAT_ANSWER(HttpStatus.INTERNAL_SERVER_ERROR, "AI 챗봇 답변을 가져오는 데 실패했습니다."),
+    FAILED_TO_GENERATE_ROADMAP(HttpStatus.INTERNAL_SERVER_ERROR, "AI 로드맵 생성에 실패했습니다."),
     AI_NETWORK_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "AI 서버와 통신 중 네트워크 오류가 발생했습니다."),
     ;
 

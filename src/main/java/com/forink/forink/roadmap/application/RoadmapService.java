@@ -7,6 +7,7 @@ import com.forink.forink.exam.entity.ExamStep;
 import com.forink.forink.exam.entity.dao.ExamRepository;
 import com.forink.forink.exam.entity.dao.ExamStepRepository;
 import com.forink.forink.global.error.BusinessException;
+import com.forink.forink.global.ai.AiClient;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_ACCESS_DENIED;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.roadmap.application.dto.request.AiRoadmapGenerateRequest;
@@ -33,12 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @Transactional
@@ -54,9 +51,7 @@ public class RoadmapService {
     private final ExamRepository examRepository;
     private final ExamStepRepository examStepRepository;
 
-    private final RestTemplate restTemplate;
-
-    private final static String aiUrl = "https://temp-ai-service.com/roadmaps";
+    private final AiClient aiClient;
 
     public List<RoadmapListResponse> getAllRoadmapList(final Member member) {
         final List<Roadmap> roadmaps = roadmapRepository.findAllByMember(member);
@@ -137,7 +132,7 @@ public class RoadmapService {
         final List<ExamStep> examSteps = examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
 
         final AiRoadmapGenerateRequest aiRequest = createAIRequest(member, exam, examSteps);
-        final AiRoadmapGenerateResponse[] aiResponses = callAiService(aiRequest);
+        final AiRoadmapGenerateResponse[] aiResponses = aiClient.generateRoadmaps(aiRequest);
         saveRoadmaps(aiResponses, member);
     }
 
@@ -181,18 +176,6 @@ public class RoadmapService {
                             contents
                     );
                 }).toList();
-    }
-
-    private AiRoadmapGenerateResponse[] callAiService(final AiRoadmapGenerateRequest aiRequest) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<AiRoadmapGenerateRequest> httpEntity = new HttpEntity<>(aiRequest, headers);
-
-        return restTemplate.postForObject(
-                aiUrl,
-                httpEntity,
-                AiRoadmapGenerateResponse[].class
-        );
     }
 
     private void saveRoadmaps(final AiRoadmapGenerateResponse[] aiResponses, final Member member) {
