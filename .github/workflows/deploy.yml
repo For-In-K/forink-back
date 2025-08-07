@@ -41,6 +41,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle- 
 
+      - name: Create secret application yml
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_SECRET_YML }}" > src/main/resources/application-secret.yml
+
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
