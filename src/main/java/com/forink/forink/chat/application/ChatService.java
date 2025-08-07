@@ -13,21 +13,14 @@ import com.forink.forink.chat.entity.dao.ChatMessageRepository;
 import com.forink.forink.chat.entity.dao.ChatRepository;
 import com.forink.forink.exam.application.ExamService;
 import com.forink.forink.global.error.BusinessException;
-import static com.forink.forink.global.error.ErrorCode.AI_NETWORK_UNAVAILABLE;
 import static com.forink.forink.global.error.ErrorCode.CHAT_NOT_FOUND;
 import static com.forink.forink.global.error.ErrorCode.FAILED_TO_GET_CHAT_ANSWER;
+import com.forink.forink.global.ai.AiClient;
 import com.forink.forink.member.entity.Member;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +32,7 @@ public class ChatService {
 
     private final ExamService examService;
 
-    private final RestTemplate restTemplate;
-
-    private static final String AI_CHAT_URL = "https://temp-ai-service.com/bots";
+    private final AiClient aiClient;
 
     public ChatCreateResponse createChat(final Member member) {
         final Chat chat = chatRepository.save(Chat.builder()
@@ -64,7 +55,7 @@ public class ChatService {
                 .map(AiChatMessageRequest.ExamStepAnswer::from)
                 .toList();
         final AiChatMessageRequest aiChatRequest = new AiChatMessageRequest(message, examSteps);
-        final ChatAnswerResponse aiChatResponse = callAiChatService(aiChatRequest, chat.getId());
+        final ChatAnswerResponse aiChatResponse = aiClient.getChatbotResponse(chat.getId(), aiChatRequest);
 
         if (aiChatResponse.chatAnswer() == null) {
             throw new BusinessException(FAILED_TO_GET_CHAT_ANSWER);
@@ -83,30 +74,6 @@ public class ChatService {
                 .content(message)
                 .type(senderType)
                 .build());
-    }
-
-    private ChatAnswerResponse callAiChatService(final AiChatMessageRequest request, final Long chatId) {
-        String url = UriComponentsBuilder.fromUriString(AI_CHAT_URL)
-                .path(String.format("/%d/messages", chatId))
-                .build()
-                .toUriString();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<AiChatMessageRequest> requestEntity = new HttpEntity<>(request, headers);
-
-        try {
-            ResponseEntity<ChatAnswerResponse> response = restTemplate.postForEntity(
-                    url,
-                    requestEntity,
-                    ChatAnswerResponse.class
-            );
-            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                return response.getBody();
-            }
-            throw new BusinessException(FAILED_TO_GET_CHAT_ANSWER);
-        } catch (RestClientException e) {
-            throw new BusinessException(AI_NETWORK_UNAVAILABLE);
-        }
     }
 
 }
