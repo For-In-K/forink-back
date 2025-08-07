@@ -31,11 +31,21 @@ jobs:
           role-to-assume: ${{ secrets.IAM_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle- 
+
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
       - name: Upload JAR to S3
-        run: aws s3 cp build/libs/*.jar s3://${{ secrets.S3_BUCKET_NAME }}/app.jar
+        run: aws s3 cp build/libs/*[!plain].jar s3://${{ secrets.S3_BUCKET_NAME }}/app.jar
 
       - name: Deploy to EC2 via AWS SSM
         run: |
