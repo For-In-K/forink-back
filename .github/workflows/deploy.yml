@@ -46,6 +46,13 @@ jobs:
           mkdir -p src/main/resources
           echo "${{ secrets.APPLICATION_SECRET_YML }}" > src/main/resources/application-secret.yml
 
+      # 디버깅용
+      - name: Verify secret file creation
+        run: |
+          echo "--- Verifying content of application-secret.yml ---"
+          cat src/main/resources/application-secret.yml
+          echo "----------------------------------------------------"
+
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
