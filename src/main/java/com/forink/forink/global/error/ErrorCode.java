@@ -22,6 +22,9 @@ public enum ErrorCode {
     REQUIRED_ANSWERS_NOT_COMPLETED(HttpStatus.BAD_REQUEST, "모든 필수 답변이 작성되지 않아 이력서를 완료할 수 없습니다."),
     RESUME_STEP_INACCESSIBLE(HttpStatus.BAD_REQUEST, "접근할 수 없는 이력서 페이지입니다."),
     // Roadmap
+    ROADMAP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 로드맵을 찾을 수 없습니다."),
+    ROADMAP_STEP_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 로드맵 스텝을 찾을 수 없습니다."),
+    ROADMAP_STEP_CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 로드맵 체크리스트를 찾을 수 없습니다."),
     ROADMAP_ACCESS_DENIED(HttpStatus.FORBIDDEN, "다른 회원의 로드맵에 접근할 수 없습니다."),
     ROADMAP_FEEDBACK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 로드맵 피드백을 찾을 수 없습니다."),
     // Chat

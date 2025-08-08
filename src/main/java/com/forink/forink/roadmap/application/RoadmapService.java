@@ -8,7 +8,11 @@ import com.forink.forink.exam.entity.dao.ExamRepository;
 import com.forink.forink.exam.entity.dao.ExamStepRepository;
 import com.forink.forink.global.error.BusinessException;
 import com.forink.forink.global.ai.AiClient;
+import static com.forink.forink.global.error.ErrorCode.EXAM_NOT_FOUND;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_ACCESS_DENIED;
+import static com.forink.forink.global.error.ErrorCode.ROADMAP_NOT_FOUND;
+import static com.forink.forink.global.error.ErrorCode.ROADMAP_STEP_CONTENT_NOT_FOUND;
+import static com.forink.forink.global.error.ErrorCode.ROADMAP_STEP_NOT_FOUND;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.roadmap.application.dto.request.AiRoadmapGenerateRequest;
 import com.forink.forink.roadmap.application.dto.request.RoadmapEntireFeedbackRequest;
@@ -83,7 +87,8 @@ public class RoadmapService {
     }
 
     public List<RoadmapTypeDetailResponse> getRoadmapTypeDetails(final Long roadmapId, final Member member) {
-        final Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow();
+        final Roadmap roadmap = roadmapRepository.findById(roadmapId)
+                .orElseThrow(() -> new BusinessException(ROADMAP_NOT_FOUND));
         if (roadmap.isNotMine(member)) {
             throw new BusinessException(ROADMAP_ACCESS_DENIED);
         }
@@ -93,7 +98,7 @@ public class RoadmapService {
 
     public void updateRoadmapIsChecked(final Long roadmapStepContentId, final Member member) {
         final RoadmapStepContent roadmapStepContent = roadmapStepContentRepository.findById(roadmapStepContentId)
-                .orElseThrow();
+                .orElseThrow(() -> new BusinessException(ROADMAP_STEP_CONTENT_NOT_FOUND));
         if (roadmapStepContent.getRoadmapStep().getRoadmap().isNotMine(member)) {
             throw new BusinessException(ROADMAP_ACCESS_DENIED);
         }
@@ -103,7 +108,8 @@ public class RoadmapService {
 
     public void createRoadmapTypeFeedback(final Long roadmapStepId, final RoadmapTypeFeedbackRequest request,
                                           final Member member) {
-        final RoadmapStep roadmapStep = roadmapStepRepository.findById(roadmapStepId).orElseThrow();
+        final RoadmapStep roadmapStep = roadmapStepRepository.findById(roadmapStepId)
+                .orElseThrow(() -> new BusinessException(ROADMAP_STEP_NOT_FOUND));
         if (roadmapStep.getRoadmap().isNotMine(member)) {
             throw new BusinessException(ROADMAP_ACCESS_DENIED);
         }
@@ -116,7 +122,8 @@ public class RoadmapService {
 
     public void createRoadmapEntireFeedback(final Long roadmapId, final RoadmapEntireFeedbackRequest request,
                                             final Member member) {
-        final Roadmap roadmap = roadmapRepository.findById(roadmapId).orElseThrow();
+        final Roadmap roadmap = roadmapRepository.findById(roadmapId)
+                .orElseThrow(() -> new BusinessException(ROADMAP_NOT_FOUND));
         if (roadmap.isNotMine(member)) {
             throw new BusinessException(ROADMAP_ACCESS_DENIED);
         }
@@ -128,7 +135,8 @@ public class RoadmapService {
     }
 
     public void createRoadmaps(final Member member) {
-        final Exam exam = examRepository.findByMember(member).orElseThrow();
+        final Exam exam = examRepository.findByMember(member)
+                .orElseThrow(() -> new BusinessException(EXAM_NOT_FOUND));
         final List<ExamStep> examSteps = examStepRepository.findAllByExamOrderByStepNumberAsc(exam);
 
         final AiRoadmapGenerateRequest aiRequest = createAIRequest(member, exam, examSteps);
