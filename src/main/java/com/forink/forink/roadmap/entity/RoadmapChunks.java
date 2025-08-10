@@ -32,7 +32,7 @@ public class RoadmapChunks extends BaseEntity {
 
     @JdbcTypeCode(JSON)
     @Column(columnDefinition = "json", nullable = false)
-    private List<String> stayDurations;
+    private List<String> stayDurationCategories;
 
     @Column(length = MAX_CATEGORY_NAME_LENGTH, nullable = false)
     private String majorCategoryName;
@@ -41,12 +41,12 @@ public class RoadmapChunks extends BaseEntity {
     private String minorCategoryName;
 
     @Column(length = MAX_TITLE_LENGTH, nullable = false)
-    private String title;
+    private String chunkTitle;
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String chunkDescription;
 
     @JdbcTypeCode(JSON)
     @Column(columnDefinition = "json", nullable = false)
-    private Map<String, Object> conditionalRules;
+    private Map<String, Object> conditionalRulesJson;
 }
