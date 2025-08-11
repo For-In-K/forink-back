@@ -42,7 +42,7 @@ public class Roadmap extends BaseEntity {
     private String title;
 
     @Column(nullable = false)
-    private Integer order;
+    private Integer itemOrder;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -59,10 +59,10 @@ public class Roadmap extends BaseEntity {
     private RoadmapCompletionFeedback roadmapCompletionFeedback;
 
     @Builder
-    private Roadmap(final Member member, final String title, final Integer order, final RoadmapType roadmapType) {
+    private Roadmap(final Member member, final String title, final Integer itemOrder, final RoadmapType roadmapType) {
         this.member = member;
         this.title = title;
-        this.order = order;
+        this.itemOrder = itemOrder;
         this.roadmapType = roadmapType;
         this.statusType = IN_PROGRESS;
     }

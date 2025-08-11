@@ -1,18 +1,18 @@
 package com.forink.forink.roadmap.application;
 
 import static com.forink.forink.exam.entity.StatusType.COMPLETED;
-
-import com.forink.forink.exam.entity.Exam;
-import com.forink.forink.exam.entity.ExamStep;
-import com.forink.forink.exam.entity.dao.ExamRepository;
-import com.forink.forink.exam.entity.dao.ExamStepRepository;
-import com.forink.forink.global.error.BusinessException;
-import com.forink.forink.global.ai.AiClient;
 import static com.forink.forink.global.error.ErrorCode.EXAM_NOT_FOUND;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_ACCESS_DENIED;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_NOT_FOUND;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_STEP_CONTENT_NOT_FOUND;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_STEP_NOT_FOUND;
+
+import com.forink.forink.exam.entity.Exam;
+import com.forink.forink.exam.entity.ExamStep;
+import com.forink.forink.exam.entity.dao.ExamRepository;
+import com.forink.forink.exam.entity.dao.ExamStepRepository;
+import com.forink.forink.global.ai.AiClient;
+import com.forink.forink.global.error.BusinessException;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.roadmap.application.dto.request.AiRoadmapGenerateRequest;
 import com.forink.forink.roadmap.application.dto.request.RoadmapEntireFeedbackRequest;
@@ -78,7 +78,7 @@ public class RoadmapService {
     }
 
     public List<RoadmapTypeListResponse> getRoadmapTypeList(final RoadmapType roadmapType, final Member member) {
-        final List<Roadmap> roadmaps = roadmapRepository.findAllByMemberAndRoadmapTypeOrderByOrderAsc(member,
+        final List<Roadmap> roadmaps = roadmapRepository.findAllByMemberAndRoadmapTypeOrderByItemOrderAsc(member,
                 roadmapType);
 
         return roadmaps.stream()
@@ -193,7 +193,7 @@ public class RoadmapService {
                     final Roadmap roadmap = Roadmap.builder()
                             .member(member)
                             .title(ai.title())
-                            .order(ai.order())
+                            .itemOrder(ai.order())
                             .roadmapType(type)
                             .build();
 

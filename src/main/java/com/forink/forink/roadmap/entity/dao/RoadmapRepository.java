@@ -10,5 +10,5 @@ public interface RoadmapRepository extends JpaRepository<Roadmap, Long> {
 
     List<Roadmap> findAllByMember(final Member member);
 
-    List<Roadmap> findAllByMemberAndRoadmapTypeOrderByOrderAsc(final Member member, final RoadmapType roadmapType);
+    List<Roadmap> findAllByMemberAndRoadmapTypeOrderByItemOrderAsc(final Member member, final RoadmapType roadmapType);
 }
