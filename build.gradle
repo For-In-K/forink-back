@@ -57,6 +57,12 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+afterEvaluate {
+    tasks.named('generateContractWrappers') {
+        dependsOn tasks.named('processResources')
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
