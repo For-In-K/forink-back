@@ -49,16 +49,29 @@ jobs:
       - name: Build project with Gradle
         run: ./gradlew clean build -x test
 
+      - name: Remove secret application yml after build (security)
+        run: rm src/main/resources/application-secret.yml
+
       - name: Upload JAR to S3
-        run: aws s3 cp build/libs/*[!plain].jar s3://${{ secrets.S3_BUCKET_NAME }}/forink-0.0.1-SNAPSHOT.jar
+        run: aws s3 cp build/libs/forink-0.0.1-SNAPSHOT.jar s3://${{ secrets.S3_BUCKET_NAME }}/forink-0.0.1-SNAPSHOT.jar
+
+      - name: Upload .env to S3
+        run: |
+          echo "${{ secrets.DOCKER_ENV }}" > .env
+          aws s3 cp .env s3://${{ secrets.S3_BUCKET_NAME }}/forink-backend/.env
+          rm .env
 
       - name: Deploy to EC2 via AWS SSM
         run: |
           aws ssm send-command \
             --instance-ids ${{ secrets.EC2_INSTANCE_ID }} \
             --document-name "AWS-RunShellScript" \
+            --comment "Deploy Forink Backend" \
             --parameters 'commands=[
               "cd /home/ec2-user/forink-back",
               "aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/forink-0.0.1-SNAPSHOT.jar .",
+              "aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/forink-backend/.env ./forink-backend.env",
+              "mv ./forink-backend.env .env",
               "sudo systemctl restart forink-backend"
-            ]'
+            ] \
+            --output text
