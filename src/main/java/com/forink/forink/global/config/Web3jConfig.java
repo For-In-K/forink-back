@@ -33,15 +33,15 @@ public class Web3jConfig {
     return Credentials.create(privateKey);
   }
 
-  @Bean
-  public GuideVerification guideVerificationContract(Web3j web3j, Credentials credentials) {
-    TransactionManager transactionManager = new RawTransactionManager(web3j, credentials, 31337L);
+  // @Bean
+  // public GuideVerification guideVerificationContract(Web3j web3j, Credentials credentials) {
+  //   TransactionManager transactionManager = new RawTransactionManager(web3j, credentials, 31337L);
 
-    return GuideVerification.load(
-        contractAddress,
-        web3j,
-        transactionManager,
-        new DefaultGasProvider()
-    );
-  }
+  //   return GuideVerification.load(
+  //       contractAddress,
+  //       web3j,
+  //       transactionManager,
+  //       new DefaultGasProvider()
+  //   );
+  // }
 }
