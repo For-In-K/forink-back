@@ -73,5 +73,5 @@ jobs:
               "aws s3 cp s3://${{ secrets.S3_BUCKET_NAME }}/forink-backend/.env ./forink-backend.env",
               "mv ./forink-backend.env .env",
               "sudo systemctl restart forink-backend"
-            ] \
+            ]' \
             --output text
