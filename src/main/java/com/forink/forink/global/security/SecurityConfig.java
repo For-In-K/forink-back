@@ -24,37 +24,37 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final TokenAuthenticationFilter tokenAuthenticationFilter;
+  private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(CsrfConfigurer::disable)
-                .cors(Customizer.withDefaults())
-                .formLogin(FormLoginConfigurer::disable)
-                .httpBasic(HttpBasicConfigurer::disable)
-                .logout(LogoutConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/oauth/**").permitAll()
-                        .anyRequest().hasAnyRole("회원", "가이드", "예비가이드")
-                )
-                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(CsrfConfigurer::disable)
+        .cors(Customizer.withDefaults())
+        .formLogin(FormLoginConfigurer::disable)
+        .httpBasic(HttpBasicConfigurer::disable)
+        .logout(LogoutConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/oauth/**").permitAll()
+            .anyRequest().hasAnyRole("회원", "가이드", "예비가이드")
+        )
+        .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("https://forink.redzzzi.com", "http://localhost:5175"));
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        config.setAllowCredentials(true);
+    config.setAllowedOrigins(List.of("https://forink.redzzzi.com", "http://localhost:5173"));
+    config.addAllowedHeader("*");
+    config.addAllowedMethod("*");
+    config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    return source;
+  }
 
 }
