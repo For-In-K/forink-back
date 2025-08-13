@@ -47,7 +47,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("https://forink.redzzzi.com", "http://localhost:5173"));
+        config.setAllowedOrigins(List.of("https://forink.redzzzi.com", "http://localhost:5175"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
