@@ -39,13 +39,13 @@ public class RoadmapController {
         return ResponseEntity.ok(roadmapService.getAllRoadmapList(member));
     }
 
-    @GetMapping("/{roadmapType}")
+    @GetMapping("/types/{roadmapType}")
     public ResponseEntity<List<RoadmapTypeListResponse>> getRoadmapTypeList(@PathVariable final RoadmapType roadmapType,
                                                                             @LoginMember final Member member) {
         return ResponseEntity.ok(roadmapService.getRoadmapTypeList(roadmapType, member));
     }
 
-    @GetMapping("/types/{roadmapId}")
+    @GetMapping("/{roadmapId}")
     public ResponseEntity<List<RoadmapTypeDetailResponse>> getRoadmapTypeDetails(@PathVariable final Long roadmapId,
                                                                                  @LoginMember final Member member) {
         return ResponseEntity.ok(roadmapService.getRoadmapTypeDetails(roadmapId, member));
