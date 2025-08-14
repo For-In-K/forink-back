@@ -14,34 +14,34 @@ import org.web3j.tx.gas.DefaultGasProvider;
 @Configuration
 public class Web3jConfig {
 
-  @Value("${blockchain.rpc-url}")
-  private String rpcUrl;
+    @Value("${blockchain.rpc-url}")
+    private String rpcUrl;
 
-  @Value("${blockchain.private-key}")
-  private String privateKey;
+    @Value("${blockchain.private-key}")
+    private String privateKey;
 
-  @Value("${blockchain.contract-address}")
-  private String contractAddress;
+    @Value("${blockchain.contract-address}")
+    private String contractAddress;
 
-  @Bean
-  public Web3j web3j() {
-    return Web3j.build(new HttpService(rpcUrl));
-  }
+    @Bean
+    public Web3j web3j() {
+        return Web3j.build(new HttpService(rpcUrl));
+    }
 
-  @Bean
-  public Credentials credentials() {
-    return Credentials.create(privateKey);
-  }
+    @Bean
+    public Credentials credentials() {
+        return Credentials.create(privateKey);
+    }
 
-  // @Bean
-  // public GuideVerification guideVerificationContract(Web3j web3j, Credentials credentials) {
-  //   TransactionManager transactionManager = new RawTransactionManager(web3j, credentials, 31337L);
+    // @Bean
+    // public GuideVerification guideVerificationContract(Web3j web3j, Credentials credentials) {
+    //   TransactionManager transactionManager = new RawTransactionManager(web3j, credentials, 31337L);
 
-  //   return GuideVerification.load(
-  //       contractAddress,
-  //       web3j,
-  //       transactionManager,
-  //       new DefaultGasProvider()
-  //   );
-  // }
+    //   return GuideVerification.load(
+    //       contractAddress,
+    //       web3j,
+    //       transactionManager,
+    //       new DefaultGasProvider()
+    //   );
+    // }
 }
