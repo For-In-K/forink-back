@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ExamRepository extends JpaRepository<Exam, Long> {
 
     Optional<Exam> findByMember(final Member member);
+    boolean existsByMember(final Member member);
 }

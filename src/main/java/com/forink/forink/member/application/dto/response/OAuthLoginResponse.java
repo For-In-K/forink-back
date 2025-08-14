@@ -22,16 +22,20 @@ public record OAuthLoginResponse(
         String name,
 
         @NotNull
-        MemberRoleType role
+        MemberRoleType role,
+
+        @NotBlank
+        boolean isCompleted
 ) {
 
-    public static OAuthLoginResponse from(String token, Member member) {
+    public static OAuthLoginResponse from(String token, Member member, boolean isCompleted) {
         return OAuthLoginResponse.builder()
                 .token(token)
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .role(member.getMemberRoleType())
+                .isCompleted(isCompleted)
                 .build();
     }
 
