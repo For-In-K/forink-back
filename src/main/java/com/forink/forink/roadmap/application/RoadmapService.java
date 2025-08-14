@@ -187,6 +187,7 @@ public class RoadmapService {
     }
 
     private void saveRoadmaps(final AiRoadmapGenerateResponse[] aiResponses, final Member member) {
+        if (aiResponses == null || aiResponses.length == 0) return;
         final List<Roadmap> roadmaps = Arrays.stream(aiResponses)
                 .map(ai -> {
                     final RoadmapType type = RoadmapType.valueOf(ai.type());
@@ -204,6 +205,7 @@ public class RoadmapService {
                                 .title(aiStep.stepTitle())
                                 .description(aiStep.stepDescription())
                                 .build();
+                        roadmap.addStep(step);
 
                         aiStep.contents().forEach(aiContent -> {
                             final RoadmapStepContent content = RoadmapStepContent.builder()
@@ -212,7 +214,6 @@ public class RoadmapService {
                                     .build();
                             step.addContent(content);
                         });
-                        roadmap.addStep(step);
                     });
                     return roadmap;
                 }).toList();

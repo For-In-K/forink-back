@@ -45,4 +45,8 @@ public class RoadmapStepContent extends BaseEntity {
     public void updateIsChecked() {
         this.isChecked = (this.isChecked == null) ? TRUE : !this.isChecked;
     }
+
+    public void setRoadmapStep(final RoadmapStep step){
+        this.roadmapStep = step;
+    }
 }

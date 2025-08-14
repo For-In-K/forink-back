@@ -56,6 +56,11 @@ public class RoadmapStep extends BaseEntity {
     }
 
     public void addContent(final RoadmapStepContent content) {
-        this.roadmapStepContents.add(content);
+        roadmapStepContents.add(content);
+        content.setRoadmapStep(this);
+    }
+
+    void setRoadmap(final Roadmap roadmap){
+        this.roadmap = roadmap;
     }
 }

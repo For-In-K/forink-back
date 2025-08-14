@@ -1,11 +1,13 @@
 package com.forink.forink.member.application;
 
+import com.forink.forink.exam.entity.dao.ExamRepository;
 import com.forink.forink.global.security.dto.GoogleUserInfo;
 import com.forink.forink.global.security.util.GoogleClient;
 import com.forink.forink.global.security.util.JwtTokenProvider;
 import com.forink.forink.member.application.dto.response.OAuthLoginResponse;
 import com.forink.forink.member.entity.Member;
 import com.forink.forink.member.entity.dao.MemberRepository;
+import com.forink.forink.resume.entity.dao.ResumeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final ExamRepository examRepository;
+    private final ResumeRepository resumeRepository;
 
     private final MemberRegistrationService memberRegistrationService;
 
@@ -45,7 +49,13 @@ public class MemberService {
                 member.getMemberRoleType().name(),
                 member.getEmail()
         );
-        return OAuthLoginResponse.from(token, member);
+        return OAuthLoginResponse.from(token, member, checkIsCompletedExamOrResume(member));
+    }
+
+    private boolean checkIsCompletedExamOrResume(final Member member){
+        boolean hasExam = examRepository.existsByMember(member);
+        boolean hasResume = resumeRepository.existsByMember(member);
+        return hasExam || hasResume;
     }
 
 }
