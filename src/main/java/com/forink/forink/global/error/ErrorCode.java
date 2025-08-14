@@ -33,6 +33,9 @@ public enum ErrorCode {
     FAILED_TO_GET_CHAT_ANSWER(HttpStatus.INTERNAL_SERVER_ERROR, "AI 챗봇 답변을 가져오는 데 실패했습니다."),
     FAILED_TO_GENERATE_ROADMAP(HttpStatus.INTERNAL_SERVER_ERROR, "AI 로드맵 생성에 실패했습니다."),
     AI_NETWORK_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "AI 서버와 통신 중 네트워크 오류가 발생했습니다."),
+    // Blockchain
+    FAILED_TO_GENERATE_BLOCKCHAIN_KEY(HttpStatus.INTERNAL_SERVER_ERROR, "블록체인 키 생성에 실패했습니다."),
+    FAILED_TO_PROCESS_BLOCKCHAIN_TRANSACTION(HttpStatus.INTERNAL_SERVER_ERROR, "블록체인 트랜잭션 처리에 실패했습니다."),
     ;
 
     private final HttpStatus httpStatus;
