@@ -51,14 +51,14 @@ public class RoadmapController {
         return ResponseEntity.ok(roadmapService.getRoadmapTypeDetails(roadmapId, member));
     }
 
-    @PatchMapping("/{roadmapStepContentId}")
+    @PatchMapping("/roadmapStepContents/{roadmapStepContentId}")
     public ResponseEntity<Void> updateRoadmapIsChecked(@PathVariable final Long roadmapStepContentId,
                                                        @LoginMember final Member member) {
         roadmapService.updateRoadmapIsChecked(roadmapStepContentId, member);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{roadmapStepId}")
+    @PostMapping("/roadmapSteps/{roadmapStepId}")
     public ResponseEntity<Void> createRoadmapTypeFeedback(@PathVariable final Long roadmapStepId,
                                                           @Valid @RequestBody final RoadmapTypeFeedbackRequest request,
                                                           @LoginMember final Member member) {
@@ -66,7 +66,7 @@ public class RoadmapController {
         return ResponseEntity.status(CREATED).build();
     }
 
-    @PostMapping("/{roadmapId}")
+    @PostMapping("/{roadmapId}/feedback")
     public ResponseEntity<Void> createRoadmapEntireFeedback(@PathVariable final Long roadmapId,
                                                             @Valid @RequestBody final RoadmapEntireFeedbackRequest request,
                                                             @LoginMember final Member member) {
