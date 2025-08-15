@@ -58,7 +58,7 @@ public class RoadmapController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/roadmapSteps/{roadmapStepId}")
+    @PostMapping("/roadmapSteps/{roadmapStepId}/feedback")
     public ResponseEntity<Void> createRoadmapTypeFeedback(@PathVariable final Long roadmapStepId,
                                                           @Valid @RequestBody final RoadmapTypeFeedbackRequest request,
                                                           @LoginMember final Member member) {
