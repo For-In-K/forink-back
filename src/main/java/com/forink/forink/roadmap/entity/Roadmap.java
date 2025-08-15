@@ -1,5 +1,6 @@
 package com.forink.forink.roadmap.entity;
 
+import static com.forink.forink.exam.entity.StatusType.COMPLETED;
 import static com.forink.forink.exam.entity.StatusType.IN_PROGRESS;
 
 import com.forink.forink.exam.entity.StatusType;
@@ -74,5 +75,9 @@ public class Roadmap extends BaseEntity {
     public void addStep(final RoadmapStep step) {
         steps.add(step);
         step.setRoadmap(this);
+    }
+
+    public void updateStatusType() {
+        this.statusType = COMPLETED;
     }
 }

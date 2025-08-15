@@ -132,6 +132,8 @@ public class RoadmapService {
                 .roadmap(roadmap)
                 .content(request.content())
                 .build());
+
+        roadmap.updateStatusType();
     }
 
     public void createRoadmaps(final Member member) {
