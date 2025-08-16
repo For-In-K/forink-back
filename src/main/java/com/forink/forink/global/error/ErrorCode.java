@@ -36,6 +36,7 @@ public enum ErrorCode {
     // Blockchain
     FAILED_TO_GENERATE_BLOCKCHAIN_KEY(HttpStatus.INTERNAL_SERVER_ERROR, "블록체인 키 생성에 실패했습니다."),
     FAILED_TO_PROCESS_BLOCKCHAIN_TRANSACTION(HttpStatus.INTERNAL_SERVER_ERROR, "블록체인 트랜잭션 처리에 실패했습니다."),
+    GUIDE_BLOCKCHAIN_ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "가이드 블록체인 계정을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
