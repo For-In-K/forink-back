@@ -1,12 +1,12 @@
 package com.forink.forink.member.entity;
 
-import com.forink.forink.global.error.BusinessException;
 import static com.forink.forink.global.error.ErrorCode.ONLY_REGULAR_MEMBER_ELIGIBLE_FOR_PREGUIDE;
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_예비가이드;
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_회원;
 
-import com.forink.forink.roadmap.entity.Roadmap;
 import com.forink.forink.global.base.BaseEntity;
+import com.forink.forink.global.error.BusinessException;
+import com.forink.forink.roadmap.entity.Roadmap;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,5 +67,13 @@ public class Member extends BaseEntity {
             throw new BusinessException(ONLY_REGULAR_MEMBER_ELIGIBLE_FOR_PREGUIDE);
         }
         this.memberRoleType = ROLE_예비가이드;
+    }
+
+    public void addPartFeedbackPoints() {
+        this.point += 5;
+    }
+
+    public void addEntireFeedbackPoints() {
+        this.point += 10;
     }
 }

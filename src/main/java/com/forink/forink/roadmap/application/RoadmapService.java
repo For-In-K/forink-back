@@ -118,6 +118,8 @@ public class RoadmapService {
                 .roadmapStep(roadmapStep)
                 .type(request.roadmapAnswerType())
                 .build());
+
+        member.addPartFeedbackPoints();
     }
 
     public void createRoadmapEntireFeedback(final Long roadmapId, final RoadmapEntireFeedbackRequest request,
@@ -134,6 +136,7 @@ public class RoadmapService {
                 .build());
 
         roadmap.updateStatusType();
+        member.addEntireFeedbackPoints();
     }
 
     public void createRoadmaps(final Member member) {
