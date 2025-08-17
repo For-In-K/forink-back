@@ -167,10 +167,10 @@ contract GuideVerification {
     // ========= 데이터 조회 =========
     function getGuideStatus(address guideAddr) external view returns (string memory) {
         Guide storage g = guides[guideAddr];
-        if (!g.isVerified && g.totalRatings < MIN_TOTAL_RATINGS) return "In progress";
-        if (!g.isVerified && g.totalRatings >= MIN_TOTAL_RATINGS) return "Almost";
-        if (g.isVerified) return "Formal Guide";
-        return "In progress";
+        if (!g.isVerified && g.totalRatings < MIN_TOTAL_RATINGS) return "IN_PROGRESS";
+        if (!g.isVerified && g.totalRatings >= MIN_TOTAL_RATINGS) return "ALMOST";
+        if (g.isVerified) return "FORMAL_GUIDE";
+        return "IN_PROGRESS";
     }
 
     function getFeedback(uint feedbackId) external view returns (

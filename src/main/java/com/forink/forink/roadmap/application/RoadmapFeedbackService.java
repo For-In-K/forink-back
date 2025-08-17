@@ -3,8 +3,6 @@ package com.forink.forink.roadmap.application;
 import static com.forink.forink.global.error.ErrorCode.FAILED_TO_PROCESS_BLOCKCHAIN_TRANSACTION;
 import static com.forink.forink.global.error.ErrorCode.GUIDE_BLOCKCHAIN_ACCOUNT_NOT_FOUND;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_FEEDBACK_NOT_FOUND;
-import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.ALMOST;
-import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.IN_PROGRESS;
 
 import com.forink.forink.global.error.BusinessException;
 import com.forink.forink.guide.entity.GuideBlockchainAccount;
@@ -72,7 +70,7 @@ public class RoadmapFeedbackService {
                 .orElseThrow(() -> new BusinessException(GUIDE_BLOCKCHAIN_ACCOUNT_NOT_FOUND));
         try {
             String privateKey = blockchainKeyHelper.decrypt(account.getPrivateKey());
-            guideVerificationManager.loadGuideVerification(blockchainKeyHelper.decrypt(privateKey))
+            guideVerificationManager.loadGuideVerification(privateKey)
                     .rateFeedback(
                             BigInteger.valueOf(feedbackId),
                             BigInteger.valueOf(request.expertiseScore()),
@@ -89,14 +87,18 @@ public class RoadmapFeedbackService {
     }
 
     public RoadmapFeedbackRatingStatusResponse getPreGuideRoadmapFeedbackRatingStatus(final Long memberId) {
-        boolean isAlmost = roadmapFeedbackRatingRepository.checkAuthorRatingStatus(memberId).isPresent();
+        GuideBlockchainAccount account = guideBlockchainAccountRepository.findByMember_Id(memberId)
+                .orElseThrow(() -> new BusinessException(GUIDE_BLOCKCHAIN_ACCOUNT_NOT_FOUND));
 
-        RoadmapFeedbackRatingStatusType status = IN_PROGRESS;
-        if (isAlmost) {
-            status = ALMOST;
+        try {
+            String privateKey = blockchainKeyHelper.decrypt(account.getPrivateKey());
+            String status = guideVerificationManager.loadGuideVerification(privateKey)
+                    .getGuideStatus(account.getEthereumAddress())
+                    .send();
+            return new RoadmapFeedbackRatingStatusResponse(RoadmapFeedbackRatingStatusType.valueOf(status));
+        } catch (Exception e) {
+            throw new BusinessException(FAILED_TO_PROCESS_BLOCKCHAIN_TRANSACTION);
         }
-
-        return new RoadmapFeedbackRatingStatusResponse(status);
     }
 
 }
