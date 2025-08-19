@@ -12,3 +12,14 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.forink: DEBUG
+  file:
+    name: /home/ec2-user/forink-back/application.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
