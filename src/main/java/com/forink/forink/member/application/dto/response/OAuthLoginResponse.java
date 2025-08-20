@@ -25,7 +25,10 @@ public record OAuthLoginResponse(
         MemberRoleType role,
 
         @NotBlank
-        boolean isCompleted
+        boolean isCompleted,
+
+        @NotNull
+        Integer point
 ) {
 
     public static OAuthLoginResponse from(String token, Member member, boolean isCompleted) {
@@ -36,6 +39,7 @@ public record OAuthLoginResponse(
                 .name(member.getName())
                 .role(member.getMemberRoleType())
                 .isCompleted(isCompleted)
+                .point(member.getPoint())
                 .build();
     }
 
