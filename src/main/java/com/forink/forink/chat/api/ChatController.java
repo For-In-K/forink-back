@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/bots")
-@Secured("ROLE_회원")
 public class ChatController {
 
     private final ChatService chatService;
