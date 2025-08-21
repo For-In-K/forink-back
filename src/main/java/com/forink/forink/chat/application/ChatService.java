@@ -22,6 +22,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ChatService {
@@ -35,13 +36,13 @@ public class ChatService {
     private final AiClient aiClient;
 
     public ChatCreateResponse createChat(final Member member) {
-        final Chat chat = chatRepository.save(Chat.builder()
-                .member(member)
-                .build());
+        final Chat chat = chatRepository.findByMember_Id(member.getId())
+                .orElseGet(() -> chatRepository.save(Chat.builder()
+                        .member(member)
+                        .build()));
         return ChatCreateResponse.from(chat);
     }
 
-    @Transactional
     public ChatAnswerResponse sendMessage(final Member member,
                                           final Long chatId,
                                           final String message) {
