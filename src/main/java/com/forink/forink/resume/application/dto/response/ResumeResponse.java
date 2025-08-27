@@ -16,7 +16,7 @@ public record ResumeResponse(
 
         String expertise,
 
-        String link
+        String location
 ) {
 
     public static ResumeResponse from(Resume resume) {
@@ -26,7 +26,7 @@ public record ResumeResponse(
                 .nationality(resume.getAnswerNationality())
                 .language(resume.getAnswerLanguage())
                 .expertise(resume.getAnswerExpertise())
-                .link(resume.getAnswerLink())
+                .location(resume.getAnswerLocation())
                 .build();
     }
 

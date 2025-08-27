@@ -58,7 +58,7 @@ public class Resume extends BaseEntity {
     private String answerExpertise;
 
     @Column
-    private String answerLink;
+    private String answerLocation;
 
     @Builder
     private Resume(final Member member) {
@@ -87,7 +87,7 @@ public class Resume extends BaseEntity {
     }
 
     public void updateAnswerLink(String answerLink) {
-        this.answerLink = answerLink;
+        this.answerLocation = answerLink;
     }
 
     private boolean areAllAnswersFilled() {
@@ -97,7 +97,7 @@ public class Resume extends BaseEntity {
                 answerNationality,
                 answerLanguage,
                 answerExpertise,
-                answerLink
+                answerLocation
         ).allMatch(Objects::nonNull);
     }
 

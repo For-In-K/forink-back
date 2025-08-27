@@ -22,7 +22,6 @@ public class GuideService {
         random = new Random();
     }
 
-    // todo: 스마트 컨트랙트 설계 이후에 수정 필요
     public List<GuideListResponse> getAllGuides() {
         return resumeRepository.findAllByMember_MemberRoleType(ROLE_가이드)
                 .stream()
@@ -34,7 +33,7 @@ public class GuideService {
     }
 
     private Integer getFakeGuideExpCount() {
-        return random.nextInt(5);
+        return random.nextInt(10);
     }
 
 }

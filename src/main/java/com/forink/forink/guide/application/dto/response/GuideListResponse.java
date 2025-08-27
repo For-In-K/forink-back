@@ -24,7 +24,10 @@ public record GuideListResponse(
         Integer guideExpCount,
 
         @NotBlank
-        String expertise
+        String expertise,
+
+        @NotBlank
+        String location
 ) {
 
     public static GuideListResponse from(Long memberId,
@@ -37,6 +40,7 @@ public record GuideListResponse(
                 .nationality(resume.getAnswerNationality())
                 .guideExpCount(guideExpCount)
                 .expertise(resume.getAnswerExpertise())
+                .location(resume.getAnswerLocation())
                 .build();
     }
 }
