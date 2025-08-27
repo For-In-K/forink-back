@@ -1,6 +1,7 @@
 package com.forink.forink.member.entity;
 
 import static com.forink.forink.global.error.ErrorCode.ONLY_REGULAR_MEMBER_ELIGIBLE_FOR_PREGUIDE;
+import static com.forink.forink.member.entity.MemberRoleType.ROLE_가이드;
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_예비가이드;
 import static com.forink.forink.member.entity.MemberRoleType.ROLE_회원;
 
@@ -63,7 +64,7 @@ public class Member extends BaseEntity {
     }
 
     public void qualifyAsPreGuide() {
-        if (this.memberRoleType != ROLE_회원) {
+        if (!ROLE_회원.equals(this.memberRoleType)) {
             throw new BusinessException(ONLY_REGULAR_MEMBER_ELIGIBLE_FOR_PREGUIDE);
         }
         this.memberRoleType = ROLE_예비가이드;
@@ -75,5 +76,9 @@ public class Member extends BaseEntity {
 
     public void addEntireFeedbackPoints() {
         this.point += 10;
+    }
+
+    public boolean isGuide() {
+        return ROLE_가이드.equals(this.memberRoleType);
     }
 }

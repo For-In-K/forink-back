@@ -55,7 +55,7 @@ public class RoadmapFeedbackController {
     @GetMapping("/ratings/status")
     @Secured("ROLE_예비가이드")
     public ResponseEntity<RoadmapFeedbackRatingStatusResponse> getPreGuideRoadmapFeedbackRatingStatus(@LoginMember final Member member) {
-        return ResponseEntity.ok(roadmapFeedbackService.getPreGuideRoadmapFeedbackRatingStatus(member.getId()));
+        return ResponseEntity.ok(roadmapFeedbackService.getPreGuideRoadmapFeedbackRatingStatus(member));
     }
 
 }

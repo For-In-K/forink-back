@@ -2,9 +2,7 @@ package com.forink.forink.roadmap.application;
 
 import com.forink.forink.global.error.BusinessException;
 import static com.forink.forink.global.error.ErrorCode.ROADMAP_FEEDBACK_NOT_FOUND;
-import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.ALMOST;
-import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.IN_PROGRESS;
-
+import com.forink.forink.member.entity.Member;
 import com.forink.forink.roadmap.application.dto.request.RoadmapFeedbackRatingRequest;
 import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackListResponse;
 import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackRatingListResponse;
@@ -12,6 +10,9 @@ import com.forink.forink.roadmap.application.dto.response.RoadmapFeedbackRatingS
 import com.forink.forink.roadmap.entity.RoadmapCompletionFeedback;
 import com.forink.forink.roadmap.entity.RoadmapCompletionFeedbackRating;
 import com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType;
+import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.ALMOST;
+import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.FORMAL_GUIDE;
+import static com.forink.forink.roadmap.entity.RoadmapFeedbackRatingStatusType.IN_PROGRESS;
 import com.forink.forink.roadmap.entity.dao.RoadmapCompletionFeedbackRatingRepository;
 import com.forink.forink.roadmap.entity.dao.RoadmapCompletionFeedbackRepository;
 import jakarta.transaction.Transactional;
@@ -54,8 +55,12 @@ public class RoadmapFeedbackService {
         return roadmapFeedbackRatingRepository.findAllStatsByAuthor(memberId);
     }
 
-    public RoadmapFeedbackRatingStatusResponse getPreGuideRoadmapFeedbackRatingStatus(final Long memberId) {
-        boolean isAlmost = roadmapFeedbackRatingRepository.checkAuthorRatingStatus(memberId).isPresent();
+    public RoadmapFeedbackRatingStatusResponse getPreGuideRoadmapFeedbackRatingStatus(final Member member) {
+        if (member.isGuide()) {
+            return new RoadmapFeedbackRatingStatusResponse(FORMAL_GUIDE);
+        }
+
+        boolean isAlmost = roadmapFeedbackRatingRepository.checkAuthorRatingStatus(member.getId()).isPresent();
 
         RoadmapFeedbackRatingStatusType status = IN_PROGRESS;
         if (isAlmost) {
